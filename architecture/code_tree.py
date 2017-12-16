@@ -1,4 +1,5 @@
-from architecture import fragments
+from architecture.fragments import Fragment, FragmentsParser
+
 
 class TreeNode:
     def __init__(self, code_fragment, nested_nodes=None):
@@ -6,7 +7,7 @@ class TreeNode:
         self.nested_nodes = [] if nested_nodes is None else nested_nodes
 
     def add_fragment(self, code_fragment):
-        if not isinstance(code_fragment, fragments.Fragment):
+        if not isinstance(code_fragment, Fragment):
             raise AttributeError("code_fragments expected Fragment but got {0}".format(type(code_fragment)))
 
         if not self.nested_nodes:
@@ -25,7 +26,7 @@ class TreeNode:
         self.nested_nodes.insert(index, TreeNode(code_fragment))
 
     def find_where_to_insert_node(self, code_fragment):
-        if not isinstance(code_fragment, fragments.Fragment):
+        if not isinstance(code_fragment, Fragment):
             AttributeError("Expected get Fragment type, but {0}".format(type(code_fragment)))
 
         if len(self.nested_nodes) == 0:
@@ -68,14 +69,17 @@ class CodeTree:
 
         :param code_lines_count: количество строк в тектовом файле
         """
-        fragment = fragments.Fragment(0, len(code_lines), 'file', 0)
+        fragment = Fragment(0, len(code_lines), 'file', 0)
         self._root = TreeNode(fragment)
         self.code_lines = code_lines
-        parser = fragments.FragmentsParser(code_lines)
+        parser = FragmentsParser(code_lines)
         fragments_list = parser.parse_code_lines()
         fragments_list.sort(key=lambda f: (f.first_line, -f.last_line))
         for fragment in fragments_list:
             self._root.add_fragment(fragment)
+
+    def add_fragment(self, fragment):
+        self._root.add_fragment(fragment)
 
     def get_root(self):
         return self._root

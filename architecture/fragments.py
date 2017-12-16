@@ -12,7 +12,7 @@ class Fragment:
         """
         self.first_line = first_line
         self.last_line = last_line
-        self.type_fragment = type_fragment
+        self.type = type_fragment
         self.nesting = nesting
 
     def __str__(self):
