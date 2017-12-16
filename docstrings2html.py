@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """ Перевод python docstrings в HTML формат """
+from architecture import code_tree
 
 ERROR_EXCEPTION = 1
 ERROR_WRONG_SETTINGS = 2
@@ -34,8 +35,8 @@ def create_parser():
     parser = argparse.ArgumentParser(
         description="""Создает HTML-документацию для модуля или файла в файле в текущей директории.""")
     parser.add_argument(
-        'path', type=str,
-        help="""Путь до модуля или файла.""")
+        'filename', type=str,
+        help="""Путь до файла.""")
     parser.add_argument(
         '-o', '--output', type=str,
         help="""Название файла.""")
@@ -60,12 +61,23 @@ def main():
     log.setFormatter(logging.Formatter(
         '%(asctime)s [%(levelname)s <%(name)s>] %(message)s'))
 
-    for module_ in (sys.modules[__name__]):
-        logger = logging.getLogger(module_.LOGGER_NAME)
-        logger.setLevel(logging.DEBUG if args.debug else logging.ERROR)
-        logger.addHandler(log)
+    logger = logging.getLogger(sys.modules[__name__].LOGGER_NAME)
+    logger.setLevel(logging.DEBUG)
+    #logger.setLevel(logging.DEBUG if args.debug else logging.ERROR)
+    logger.addHandler(log)
 
-    pass
+    lines = get_code_lines(args.filename)
+
+    tree = code_tree.CodeTree(len(lines))
+    tree.build(lines)
+
+
+
+def get_code_lines(filename):
+    with open(filename, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        print(lines[0:4])
+        return lines
 
 if __name__ == "__main__":
     main()
