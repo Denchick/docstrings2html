@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """ Перевод python docstrings в HTML формат """
 from architecture import code_tree
+from architecture.code_tree import CodeTree
+from architecture.docs_by_tree import DocsByTree
+from architecture.html_builder import HtmlBuilder
 
 ERROR_EXCEPTION = 1
 ERROR_WRONG_SETTINGS = 2
@@ -62,22 +65,25 @@ def main():
         '%(asctime)s [%(levelname)s <%(name)s>] %(message)s'))
 
     logger = logging.getLogger(sys.modules[__name__].LOGGER_NAME)
-    logger.setLevel(logging.DEBUG)
-    #logger.setLevel(logging.DEBUG if args.debug else logging.ERROR)
+    logger.setLevel(logging.DEBUG if args.debug else logging.ERROR)
     logger.addHandler(log)
 
-    lines = get_code_lines(args.filename)
-
-    tree = code_tree.CodeTree(len(lines))
-    tree.build(lines)
+    builder(args.filename)
 
 
+def get_code(code_filename):
+    with open(code_filename, 'r', encoding='utf-8') as f:
+        return f.read()
 
-def get_code_lines(filename):
-    with open(filename, 'r', encoding='utf-8') as f:
-        lines = f.readlines()
-        print(lines[0:4])
-        return lines
+
+def builder(code_filename):
+    code = get_code(code_filename)
+    code_lines = code.split('\n')
+    tree = CodeTree(code_lines)
+    docs = DocsByTree(tree, code_lines, code_filename)
+    html_obj = HtmlBuilder(docs)
+
+    print(html_obj.get_html())
 
 if __name__ == "__main__":
     main()

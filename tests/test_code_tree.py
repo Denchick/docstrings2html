@@ -7,24 +7,24 @@ sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
 from architecture import code_tree
 from architecture import fragments
 
-class TestCodeHierarchyTree(unittest.TestCase):
-    def test_correct_hierarchy_when_there_are_no_code_fragments(self):
+class TestCodeTree(unittest.TestCase):
+    def test_correctTree_whenThereAreNoCodeFragments(self):
         code_lines = []
         nodes = self.get_nodes(code_lines)
         self.assertTrue(nodes == [])
 
-    def test_correct_hierarchy_when_there_are_no_code_fragments2(self):
+    def test_correctTree_whenThereAreNoCodeFragments2(self):
         code_lines = ['oh my code']
         nodes = self.get_nodes(code_lines)
         self.assertTrue(nodes == [])
 
-    def test_correct_hierarchy_when_there_are_no_code_fragments3(self):
+    def test_correctTree_wheThereAreNoCodeFragments3(self):
         code_lines = ['']
         nodes = self.get_nodes(code_lines)
         self.assertTrue(nodes == [])
 
 
-    def test_correct_hierarchy_when_there_are_no_code_fragments4(self):
+    def test_correctTree_whenThereAreNoCodeFragments4(self):
         code_lines = [
             'oh my code',
             ''
@@ -33,7 +33,7 @@ class TestCodeHierarchyTree(unittest.TestCase):
         nodes = self.get_nodes(code_lines)
         self.assertTrue(nodes == [])
 
-    def test_correct_hierarchy_when_one_code_fragments(self):
+    def test_correctTree_whenOneCodeFragments(self):
         code_lines = ['class kek:']
         expected = [
             code_tree.TreeNode(
@@ -45,7 +45,7 @@ class TestCodeHierarchyTree(unittest.TestCase):
         for i in expected:
             self.assertTrue(i in actual)
 
-    def test_correct_hierarchy_when_few_nested_code_fragments(self):
+    def test_correctTree_whenFewNestedCodeFragments(self):
         code_lines = ['class kek:', '    def cheburek:', '        pass']
         expected = [
             code_tree.TreeNode(
@@ -61,7 +61,7 @@ class TestCodeHierarchyTree(unittest.TestCase):
         for i in expected:
             self.assertTrue(i in actual)
 
-    def test_correct_hierarchy_when_few_not_nested_code_fragments(self):
+    def test_correctTree_whenFewNotNestedCodeFragments(self):
         code_lines = ['class kek:', '    pass', 'def cheburek:', '    pass']
         expected = [
             code_tree.TreeNode(

@@ -1,3 +1,6 @@
+""" По разбитым фрагментам кода строится дерево его "компонентов"
+ по вложенности друг в друга"""
+
 from architecture.fragments import Fragment, FragmentsParser
 
 
@@ -14,7 +17,7 @@ class TreeNode:
             self.nested_nodes.append(TreeNode(code_fragment))
             return
 
-        index = self.find_where_to_insert_node(code_fragment)
+        index = self._find_where_to_insert_node(code_fragment)
         if (index == len(self.nested_nodes)):
             self.nested_nodes.append(TreeNode(code_fragment))
             return
@@ -25,7 +28,7 @@ class TreeNode:
             return
         self.nested_nodes.insert(index, TreeNode(code_fragment))
 
-    def find_where_to_insert_node(self, code_fragment):
+    def _find_where_to_insert_node(self, code_fragment):
         if not isinstance(code_fragment, Fragment):
             AttributeError("Expected get Fragment type, but {0}".format(type(code_fragment)))
 
@@ -77,9 +80,6 @@ class CodeTree:
         fragments_list.sort(key=lambda f: (f.first_line, -f.last_line))
         for fragment in fragments_list:
             self._root.add_fragment(fragment)
-
-    def add_fragment(self, fragment):
-        self._root.add_fragment(fragment)
 
     def get_root(self):
         return self._root
