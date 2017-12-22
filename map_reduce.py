@@ -88,7 +88,7 @@ class MapReduce:
         return True
 
     def key_sort_piece(self, obj):
-        """ Ключ для сортировки
+        """ Ключ для сортировки.
 
         Returns:
              comparable object.
@@ -190,7 +190,8 @@ class MapReduce:
 
     def get_extremum_among_pieces(self):
         """
-        Ищет экстремум среди всех верхних элементов кусков
+        Ищет экстремум среди всех верхних элементов кусков.
+
         Returns:
             Extremum obj: если экстремум найден
             None: если экстремума нет, то есть все куски прочитаны до конца
@@ -214,9 +215,7 @@ class MapReduce:
         return self.key_sort_piece(extr.data) > self.key_sort_piece(element)
 
     def clean_up(self):
-        """
-        Удаляет после работы утилиты временные файлы
-        """
+        """ Удаляет после работы утилиты временные файлы. """
         if self.temp_directory_object is not None:
             self.temp_directory_object.cleanup()
         elif not self.debug:

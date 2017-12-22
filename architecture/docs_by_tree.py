@@ -7,7 +7,7 @@ from architecture import code_tree
 
 
 class DocsByTree:
-    def __init__(self, tree, code_lines, module_filename):
+    def __init__(self, tree, code_lines, code, module_name):
         if not isinstance(tree, code_tree.CodeTree):
             raise AttributeError
         self.tree = tree
@@ -15,7 +15,9 @@ class DocsByTree:
             raise AttributeError
 
         self._documentation_nodes = []
-        self.module_filename = module_filename
+        self.code = code
+        self.module_description = self.get_module_description()
+        self.module_filename = module_name
         self.code_lines = code_lines
         self._add_documentation(self.tree.get_root())
 
@@ -25,8 +27,8 @@ class DocsByTree:
 
         code_data = CodeData(tree_node.code_fragment,
                              self.module_filename,
-                             self.get_signature(self.code_lines, tree_node.code_fragment.first_line),
-                             self.get_docstring(self.code_lines, tree_node.code_fragment.first_line),
+                             self._get_signature(self.code_lines, tree_node.code_fragment.first_line),
+                             self._get_docstring(self.code_lines, tree_node.code_fragment.first_line),
                              self.get_fragments_names_of_this_type(tree_node, 'class'),
                              self.get_fragments_names_of_this_type(tree_node, 'def'))
 
@@ -35,7 +37,7 @@ class DocsByTree:
             self._add_documentation(node)
 
     @staticmethod
-    def get_signature(code_lines, signature_index):
+    def _get_signature(code_lines, signature_index):
         index = signature_index
         result = ''
         while True:
@@ -48,25 +50,40 @@ class DocsByTree:
             index += 1
         return result[:-1]
 
+    def get_methods(self):
+        return [doc_node for doc_node in self.get_documentation_nodes() if doc_node.fragment.type == 'def']
+
+    def get_classes(self):
+        return [doc_node for doc_node in self.get_documentation_nodes() if doc_node.fragment.type == 'class']
+
     @staticmethod
-    def get_docstring(code_lines, signature_index):
+    def _get_docstring(code_lines, signature_index):
+        docstring = DocsByTree._get_raw_docstring(code_lines, signature_index)
+        nesting = len(docstring) -len(docstring.lstrip())
+        lines = [DocsByTree._get_docstring_without_quotes(line[nesting:])  for line in docstring.split('\n')]
+        return '\n'.join(lines)
+
+    @staticmethod
+    def _get_raw_docstring(code_lines, signature_index):
         code = '\n'.join(code_lines[signature_index:])
 
-        pattern1 = r'^\s*"""([\w\s.,\/#!$%\^&\*;:{}=\-_`~()]*)"""'
-        pattern2 = r'^\s*"([\w\s.,\/#!$%\^&\*;:{}=\-_`~()]*)"'
-        pattern3 = r"^\s*'([\w\s.,\/#!$%\^&\*;:{}=\-_`~()]*)'"
-        result = re.search(pattern1, code)
-        if result:
-            return result.group(1)
-        result = re.search(pattern2, code)
-        if result:
-            return result.group(1)
-        result = re.search(pattern3, code)
-        if result:
-            return result.group(1)
-        return result
+        pattern1 = r'([\ ]*"""[\S\s]*?""")'
+        pattern2 = r'([\ ]*"[\S\s]*?")'
+        pattern3 = r"([\ ]*'[\S\s]*?')"
+        re_result = re.search(pattern1, code)
+        if re_result:
+            return re_result.group(1)
+        re_result = re.search(pattern2, code)
+        if re_result:
+            return re_result.group(1)
+        re_result = re.search(pattern3, code)
+        if re_result:
+            return re_result.group(1)
+        return "empty"
 
-
+    @staticmethod
+    def _get_docstring_without_quotes(docstring):
+        return docstring.strip('"\'')
 
     def get_documentation_nodes(self):
         return self._documentation_nodes
@@ -74,16 +91,37 @@ class DocsByTree:
     def get_fragments_names_of_this_type(self, tree_node, type):
         if not isinstance(type, str):
             raise AttributeError
-        return [ self.get_name(f.code_fragment, 'kek') for f in tree_node.nested_nodes if f.code_fragment.type == type]
+        return [self._get_name(f.code_fragment, 'kek') for f in tree_node.nested_nodes if f.code_fragment.type == type]
 
     @staticmethod
-    def get_name(self, signature):
+    def _get_name(self, signature):
         # переделать!
         return 'signature'
-        pattern = "def ([\s\w]*)\(([\s\w!\"#$%&\'()*+,\-\./:;<=>?@[\\\]^_`{|}~]*)\):"
-        result = re.search(pattern, signature)
-        return result.group(0)
+        pattern1 = "def ([\s\w]*)\(([\s\w!\"#$%&\'()*+,\-\./:;<=>?@[\\\]^_`{|}~]*)\):"
+        result = re.search(pattern, signature).group(0)
+        if result:
+            return result
+        pattern2 = "class ([\s\w]*)\(([\s\w!\"#$%&\'()*+,\-\./:;<=>?@[\\\]^_`{|}~]*)\):"
+        result = re.search(pattern, signature).group(0)
+        if result:
+            return result
+        return 'елки-палки, дичь какая-то! ' + signature
         #return self.code_lines[fragment.first_line].strip().replace(':', ' ').replace('(', ' ').split()[1]
+
+    def get_module_description(self):
+        pattern1 = r'^\s*"""([\w\s.,\/#!$%\^&\*;:{}=\-_`~()]*)"""'
+        pattern2 = r'^\s*"([\w\s.,\/#!$%\^&\*;:{}=\-_`~()]*)"'
+        pattern3 = r"^\s*'([\w\s.,\/#!$%\^&\*;:{}=\-_`~()]*)'"
+        result = re.search(pattern1, self.code)
+        if result:
+            return result.group(1)
+        result = re.search(pattern2, self.code)
+        if result:
+            return result.group(1)
+        result = re.search(pattern3, self.code)
+        if result:
+            return result.group(1)
+        return result
 
 
 class CodeData:
@@ -94,3 +132,14 @@ class CodeData:
         self.docstring = docstring
         self.classes = classes
         self.functions = functions
+
+    def get_annotation(self):
+        """ короткое описание фрагмента """
+        annotation = self.docstring.split('.')
+        if len(annotation) > 0:
+            return annotation[0]
+        return ''
+
+    def get_name(self):
+        if self.signature.startswith('def') or self.signature.starts_with('class'):
+            return self.signature.replace('(', ' ').replace(':', ' ').split()[1]

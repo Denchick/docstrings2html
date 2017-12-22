@@ -80,10 +80,13 @@ def builder(code_filename):
     code = get_code(code_filename)
     code_lines = code.split('\n')
     tree = CodeTree(code_lines)
-    docs = DocsByTree(tree, code_lines, code_filename)
+    docs = DocsByTree(tree, code_lines, code, code_filename)
     html_obj = HtmlBuilder(docs)
 
-    print(html_obj.get_html())
+    out = html_obj.get_html()
+    print(out)
+    with open(r'C:\Users\Volkov\YandexDisk\Python_курс\docstrings2html\themes\index.html', 'w') as f:
+        f.write(out)
 
 if __name__ == "__main__":
     main()
