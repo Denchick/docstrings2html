@@ -19,22 +19,25 @@ class DocsByTree:
         self.module_description = self.get_module_description()
         self.module_filename = module_name
         self.code_lines = code_lines
-        self._add_documentation(self.tree.get_root())
+        self._add_documentation(self.tree.get_root(), None)
 
-    def _add_documentation(self, tree_node):
-        if not isinstance(tree_node, code_tree.TreeNode):
+    def _add_documentation(self, node, parent_node):
+        if not isinstance(node, code_tree.TreeNode):
+            raise AttributeError
+        if parent_node is not None and not isinstance(parent_node, code_tree.TreeNode):
             raise AttributeError
 
-        code_data = CodeData(tree_node.code_fragment,
+        code_data = CodeData(node.code_fragment,
                              self.module_filename,
-                             self._get_signature(self.code_lines, tree_node.code_fragment.first_line),
-                             self._get_docstring(self.code_lines, tree_node.code_fragment.first_line),
-                             self.get_fragments_names_of_this_type(tree_node, 'class'),
-                             self.get_fragments_names_of_this_type(tree_node, 'def'))
+                             self._get_signature(self.code_lines, node.code_fragment.first_line),
+                             self._get_docstring(self.code_lines, node.code_fragment.first_line),
+                             self.get_fragments_names_of_this_type(node, 'class'),
+                             self.get_fragments_names_of_this_type(node, 'def'),
+                             self.get_tree_node_name(parent_node))
 
         self._documentation_nodes.append(code_data)
-        for node in tree_node.nested_nodes:
-            self._add_documentation(node)
+        for current_node in node.nested_nodes:
+            self._add_documentation(current_node, node)
 
     @staticmethod
     def _get_signature(code_lines, signature_index):
@@ -123,15 +126,23 @@ class DocsByTree:
             return result.group(1)
         return result
 
+    def get_tree_node_name(self, tree_node):
+        if tree_node is None:
+            return ''
+        first_line = self.code_lines[tree_node.code_fragment.first_line]
+        first_line = first_line.replace(':', ' ').replace('(', ' ')
+        if 'def' in first_line or 'class' in first_line:
+            return first_line.split()[1]
 
 class CodeData:
-    def __init__(self, fragment, filename, signature, docstring, classes, functions):
+    def __init__(self, fragment, filename, signature, docstring, classes, functions, parent_name):
         self.fragment = fragment
         self.filename = filename
         self.signature = signature
         self.docstring = docstring
         self.classes = classes
         self.functions = functions
+        self.parent_name = parent_name
 
     def get_annotation(self):
         """ короткое описание фрагмента """
@@ -142,4 +153,6 @@ class CodeData:
 
     def get_name(self):
         if self.signature.startswith('def') or self.signature.starts_with('class'):
-            return self.signature.replace('(', ' ').replace(':', ' ').split()[1]
+            return "{0}.{1}".format(
+                self.parent_name,
+                self.signature.replace('(', ' ').replace(':', ' ').split()[1])
