@@ -20,7 +20,7 @@
 
 ## Требования
 - Python 3;
-- (http://www.yattag.org/)[Yattag] - библиотека для pythonic way генерации HTML и XML;
+- (Yattag)[http://www.yattag.org/] - библиотека для pythonic way генерации HTML и XML;
 
 ## Состав
 
