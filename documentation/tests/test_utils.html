@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Documentation for test_utils.py</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http_equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="..\template/css/cyborg.bootstrap.min.css" media="screen" />
+    <link rel="stylesheet" href="..\template/css/cyborg.bootstrap.css" media="screen" />
+    <link id="highlight-style" rel="stylesheet" href="..\template/css/default.css" />
+    <link rel="stylesheet" href="..\template/css/custom.min.css" media="screen" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="https://github.com/Denchick/docstrings2html">docstring2html</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Start page</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Index</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#source_code">Source Code</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#instance_classes">Instance Classes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#methods">Methods</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1>test_utils.py</h1>
+            <p class="lead">Documentation for</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <h2>
+          <a name="instance_classes">Instance Classes</a>
+        </h2>
+        <div class="jumbotron">
+          <h2>class TestUtils(unittest.TestCase)</h2>
+          <p>__main__.</p>
+        </div>
+        <h2>
+          <a name="methods">Methods</a>
+        </h2>
+        <div class="jumbotron">
+          <h2>TestUtils.setUp</h2>
+          <p>
+            <code>def setUp(self)</code>
+          </p>
+          <pre class="description">__main__</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>TestUtils.tearDown</h2>
+          <p>
+            <code>def tearDown(self)</code>
+          </p>
+          <pre class="description">__main__</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>TestUtils.test_get_next_data_piece</h2>
+          <p>
+            <code>def test_get_next_data_piece(self)</code>
+          </p>
+          <pre class="description">__main__</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>test_get_next_data_piece.pattern_for_testing_without_exceptions</h2>
+          <p>
+            <code>def pattern_for_testing_without_exceptions(data, separator, count, expected)</code>
+          </p>
+          <pre class="description">__main__</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>test_get_next_data_piece.pattern_for_testing_with_exceptions</h2>
+          <p>
+            <code>def pattern_for_testing_with_exceptions(data, separator, count, error_type)</code>
+          </p>
+          <pre class="description">__main__</pre>
+        </div>
+      </div>
+      <h2>
+        <a name="source_code">Source code</a>
+      </h2>
+      <pre>
+        <code class="py">import unittest
+import os
+import sys
+
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                             os.path.pardir))
+from map_reduce import utils
+
+
+class TestUtils(unittest.TestCase):
+    def setUp(self):
+        self.filename = 'temp.txt'
+
+    def tearDown(self):
+        if os.path.exists(self.filename):
+            os.remove(self.filename)
+
+    def test_get_next_data_piece(self):
+        def pattern_for_testing_without_exceptions(data, separator, count, expected):
+            with open(self.filename, 'w') as f:
+                f.write(separator.join(data))
+            with open(self.filename, 'r') as f:
+                result = utils.get_next_data_piece(f, count, separator)
+                self.assertEqual(result, expected)
+
+        def pattern_for_testing_with_exceptions(data, separator, count, error_type):
+            sep = ';' if not isinstance(separator, str) else separator
+            with open(self.filename, 'w') as f:
+                f.write(sep.join(data))
+            with open(self.filename, 'r') as f:
+                with self.assertRaises(error_type):
+                    utils.get_next_data_piece(f, count, separator)
+
+        pattern_for_testing_without_exceptions(['kek', 'cheburek'], ';', 3, 'kek')
+        pattern_for_testing_without_exceptions(['kek', 'cheburek'], ';', 4, 'kek')
+        pattern_for_testing_without_exceptions(['kek', 'cheburek'], ';', 5, 'kek;cheburek')
+        pattern_for_testing_without_exceptions(['kek'], ';', 4, 'kek')
+        pattern_for_testing_without_exceptions(['kek', 'cheburek'], ';', 20, 'kek;cheburek')
+
+        pattern_for_testing_with_exceptions(['kek'], ';', '401', TypeError)
+        pattern_for_testing_with_exceptions(['kek'], True, 2, TypeError)
+        with self.assertRaises(AttributeError):
+            utils.get_next_data_piece('not_file', 10, '\n')
+
+
+if __name__ == "__main__":
+    unittest.main()
+</code>
+      </pre>
+      <footer id="footer">
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="list-unstyled">
+              <li class="float-lg-right">
+                <a href="#top">Back to top</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+<script src="..\template/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>

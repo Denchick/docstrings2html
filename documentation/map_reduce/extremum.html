@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Documentation for extremum.py</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http_equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="..\template/css/cyborg.bootstrap.min.css" media="screen" />
+    <link rel="stylesheet" href="..\template/css/cyborg.bootstrap.css" media="screen" />
+    <link id="highlight-style" rel="stylesheet" href="..\template/css/default.css" />
+    <link rel="stylesheet" href="..\template/css/custom.min.css" media="screen" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="https://github.com/Denchick/docstrings2html">docstring2html</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Start page</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Index</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#source_code">Source Code</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#instance_classes">Instance Classes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#methods">Methods</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1>extremum.py</h1>
+            <p class="lead">Documentation for</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <h2>
+          <a name="instance_classes">Instance Classes</a>
+        </h2>
+        <div class="jumbotron">
+          <h2>class Extremum</h2>
+          <p> Удобная структура для хранения пары кусок &lt;- его верхний элемент.</p>
+        </div>
+        <h2>
+          <a name="methods">Methods</a>
+        </h2>
+        <div class="jumbotron">
+          <h2>Extremum.__init__</h2>
+          <p>
+            <code>def __init__(self, data, piece_obj)</code>
+          </p>
+          <pre class="description"> Удобная структура для хранения пары кусок &lt;- его верхний элемент. 
+
+Args:
+    data (str): верхний элемент piece_obj.
+    piece_obj (piece.Piece): объект соответствующего маленького файла - куска.
+
+Raises:
+    TypeError: если piece_obj не является объектом piece.Piece.
+</pre>
+        </div>
+      </div>
+      <h2>
+        <a name="source_code">Source code</a>
+      </h2>
+      <pre>
+        <code class="py">from . import piece
+
+
+class Extremum:
+    def __init__(self, data, piece_obj):
+        """ Удобная структура для хранения пары кусок &lt;- его верхний элемент. 
+
+        Args:
+            data (str): верхний элемент piece_obj.
+            piece_obj (piece.Piece): объект соответствующего маленького файла - куска.
+        
+        Raises:
+            TypeError: если piece_obj не является объектом piece.Piece.
+        """
+        if not isinstance(piece_obj, piece.Piece) and piece_obj is not None:
+            raise TypeError("piece_obj must be of instance of piece.Piece")
+        self.data = data
+        self.piece_obj = piece_obj
+</code>
+      </pre>
+      <footer id="footer">
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="list-unstyled">
+              <li class="float-lg-right">
+                <a href="#top">Back to top</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+<script src="..\template/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>

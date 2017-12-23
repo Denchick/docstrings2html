@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Documentation for piece.py</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http_equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="..\template/css/cyborg.bootstrap.min.css" media="screen" />
+    <link rel="stylesheet" href="..\template/css/cyborg.bootstrap.css" media="screen" />
+    <link id="highlight-style" rel="stylesheet" href="..\template/css/default.css" />
+    <link rel="stylesheet" href="..\template/css/custom.min.css" media="screen" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="https://github.com/Denchick/docstrings2html">docstring2html</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Start page</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Index</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#source_code">Source Code</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#instance_classes">Instance Classes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#methods">Methods</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1>piece.py</h1>
+            <p class="lead">Documentation for</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <h2>
+          <a name="instance_classes">Instance Classes</a>
+        </h2>
+        <div class="jumbotron">
+          <h2>class Piece</h2>
+          <p> Конструктор кусочка - одного фрагмента большого файла.</p>
+        </div>
+        <h2>
+          <a name="methods">Methods</a>
+        </h2>
+        <div class="jumbotron">
+          <h2>Piece.__init__</h2>
+          <p>
+            <code>def __init__(self, index, data, directory)</code>
+          </p>
+          <pre class="description"> Конструктор кусочка - одного фрагмента большого файла.
+
+Args:
+    index(int): порядковый номер части, на которую разбит исходный файл.
+    data(str): данные, которые следует записать в кусок.
+    directory(str): папка для хранения временных файлов - кусков. 
+</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>Piece.write_to_filename</h2>
+          <p>
+            <code>def write_to_filename(self, data, directory)</code>
+          </p>
+          <pre class="description"> Запись данных в кусок. При этом, если в файле уже что-то было, то содержимое перезаписывается. 
+
+Args:
+    data(str): данные, которые следует записать в файл. 
+    directory(str): папка, в которой хранятся временные файлы - куски.
+    
+Raises:
+    TypeError: если data не строка.
+</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>Piece.get_data</h2>
+          <p>
+            <code>def get_data(self, directory)</code>
+          </p>
+          <pre class="description"> Чтение данных из куска с 0 байта и до коцна файла. Указатель на верхний элемент не сдвигается.
+
+Args:
+    directory(str): папка, в которой хранятся временные файлы - куски.       
+</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>Piece.get_up_element</h2>
+          <p>
+            <code>def get_up_element(self, directory, separator)</code>
+          </p>
+          <pre class="description"> Получает верхний элемент куска.
+Читает строку в файле, начиная с указателя на верхний элемент. При этом, указатель не смещается. 
+
+Args:
+    directory(str): папка, в которой хранятся временные файлы - куски.
+    separator: разделитель между значениями.
+</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>Piece.move_data_pointer</h2>
+          <p>
+            <code>def move_data_pointer(self, offset)</code>
+          </p>
+          <pre class="description"> Смещает указатель на верхний элемент куска на offset байт
+
+Args:
+    offset (int): смещение указателя(в байтах) 
+
+Raises:
+    TypeError: если смещение не целое число.
+    RuntimeError: если после смещения указатель на верхний элемент становится отрицательным.
+</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>Piece.delete_up_element</h2>
+          <p>
+            <code>def delete_up_element(self, directory, separator)</code>
+          </p>
+          <pre class="description"> Удаляет верхний элемент куска.
+Читает строку в файле, начиная с указателя на верхний элемент. При этом, указатель не смещается. 
+
+Args:
+    directory(str): папка, в которой хранятся временные файлы - куски.
+    separator: разделитель между значениями.
+</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>Piece.is_empty</h2>
+          <p>
+            <code>def is_empty(self, directory)</code>
+          </p>
+          <pre class="description"> Проверяет, прочитан ли до конца кусок. 
+
+Args:
+    directory(str): папка, в которой хранятся временные файлы - куски.
+</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>Piece.get_path</h2>
+          <p>
+            <code>def get_path(self, directory)</code>
+          </p>
+          <pre class="description"> Формирует относительный путь до куска в виде: 'directory/index' в зависимости от ОС.
+
+Args:
+    directory(str): папка, в которой хранятся временные файлы - куски.
+
+Returns:
+    Относительный путь до соответствующего куска.
+</pre>
+        </div>
+      </div>
+      <h2>
+        <a name="source_code">Source code</a>
+      </h2>
+      <pre>
+        <code class="py">import os
+from . import utils
+
+
+class Piece:
+    def __init__(self, index, data, directory):
+        """ Конструктор кусочка - одного фрагмента большого файла.
+        
+        Args:
+            index(int): порядковый номер части, на которую разбит исходный файл.
+            data(str): данные, которые следует записать в кусок.
+            directory(str): папка для хранения временных файлов - кусков. 
+        """
+        if not isinstance(index, int):
+            raise TypeError("Index of piece must be an integer but {0}:{1}.".format(type(index), index))
+        if not isinstance(data, str):
+            raise TypeError("Name of directory must be a string but {0}:{1}.".format(type(data), data))
+        if not os.path.isdir(directory):
+            raise AttributeError("Directory path '{0}' is incorrect".format(directory))
+
+        self.index = index
+        self.data_pointer = 0  # каретка
+        if os.path.exists(self.get_path(directory)):
+            raise RuntimeWarning('File with {0} index already exists.'.format(self.index))
+        self.write_to_filename(data, directory)
+
+    def write_to_filename(self, data, directory):
+        """ Запись данных в кусок. При этом, если в файле уже что-то было, то содержимое перезаписывается. 
+
+        Args:
+            data(str): данные, которые следует записать в файл. 
+            directory(str): папка, в которой хранятся временные файлы - куски.
+            
+        Raises:
+            TypeError: если data не строка.
+        """
+        if not os.path.isdir(directory):
+            raise AttributeError("Directory path '{0}' is incorrect".format(directory))
+        if not isinstance(data, str):
+            raise TypeError("Data must be a string but {0}".format(type(data), data))
+        path = self.get_path(directory)
+        with open(path, 'w') as f:
+            f.write(data)
+
+    def get_data(self, directory):
+        """ Чтение данных из куска с 0 байта и до коцна файла. Указатель на верхний элемент не сдвигается.
+ 
+        Args:
+            directory(str): папка, в которой хранятся временные файлы - куски.       
+        """
+        path = self.get_path(directory)
+        if not os.path.isdir(directory):
+            raise AttributeError("Directory path '{0}' is incorrect".format(directory))
+        with open(path, 'r') as f:
+            return f.read()
+
+    def get_up_element(self, directory, separator):
+        """ Получает верхний элемент куска.
+        Читает строку в файле, начиная с указателя на верхний элемент. При этом, указатель не смещается. 
+
+        Args:
+            directory(str): папка, в которой хранятся временные файлы - куски.
+            separator: разделитель между значениями.
+        """
+        if not os.path.isdir(directory):
+            raise AttributeError("Directory path '{0}' is incorrect".format(directory))
+        path = self.get_path(directory)
+        with open(path, 'r') as f:
+            f.seek(self.data_pointer)
+            result = []
+            while True:
+                current = f.read(1)
+                if not result and current == separator:
+                    continue
+                if not current or current == separator and result:
+                    break
+                result.append(current)
+            return ''.join(result)
+
+    def move_data_pointer(self, offset):
+        """ Смещает указатель на верхний элемент куска на offset байт
+
+        Args:
+            offset (int): смещение указателя(в байтах) 
+        
+        Raises:
+            TypeError: если смещение не целое число.
+            RuntimeError: если после смещения указатель на верхний элемент становится отрицательным.
+        """
+        if not isinstance(offset, int):
+            raise TypeError("Offset must be an integer but {0}.".format(type(offset), offset))
+        if self.data_pointer + offset &lt; 0:
+            raise RuntimeError(
+                "Impossible to move on {0} bytes because pointer would be negative.".format(offset))
+        self.data_pointer += offset
+
+    def delete_up_element(self, directory, separator):
+        """ Удаляет верхний элемент куска.
+        Читает строку в файле, начиная с указателя на верхний элемент. При этом, указатель не смещается. 
+
+        Args:
+            directory(str): папка, в которой хранятся временные файлы - куски.
+            separator: разделитель между значениями.
+        """
+        if not os.path.isdir(directory):
+            raise AttributeError("Directory path '{0}' is incorrect".format(directory))
+
+        path = self.get_path(directory)
+        with open(path, 'r') as f:
+            f.seek(self.data_pointer)
+            is_get_any_bytes = False
+            while True:
+                current = f.read(1)
+                self.data_pointer += 1
+                if not is_get_any_bytes and current == separator:
+                    continue
+                if not current or current == separator and is_get_any_bytes:
+                    break
+                is_get_any_bytes = True
+
+    def is_empty(self, directory):
+        """ Проверяет, прочитан ли до конца кусок. 
+
+        Args:
+            directory(str): папка, в которой хранятся временные файлы - куски.
+        """
+        path = self.get_path(directory)
+        with open(path, 'r') as f:
+            f.seek(self.data_pointer)
+            if f.read(1) == '':
+                return True
+            return False
+
+    def get_path(self, directory):
+        """ Формирует относительный путь до куска в виде: 'directory/index' в зависимости от ОС.
+
+        Args:
+            directory(str): папка, в которой хранятся временные файлы - куски.
+
+        Returns:
+            Относительный путь до соответствующего куска.
+        """
+        return os.path.join(directory, str(self.index))
+</code>
+      </pre>
+      <footer id="footer">
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="list-unstyled">
+              <li class="float-lg-right">
+                <a href="#top">Back to top</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+<script src="..\template/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>

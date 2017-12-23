@@ -2,12 +2,9 @@ import unittest
 import os
 import sys
 
-from architecture.code_tree import CodeTree, TreeNode
-from architecture.docs_by_tree import DocsByTree
-from architecture.fragments import Fragment
-
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
+from architecture.docs_by_tree import DocsByTree
 
 class TestDocByTree(unittest.TestCase):
 

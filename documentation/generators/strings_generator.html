@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Documentation for strings_generator.py</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http_equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="..\template/css/cyborg.bootstrap.min.css" media="screen" />
+    <link rel="stylesheet" href="..\template/css/cyborg.bootstrap.css" media="screen" />
+    <link id="highlight-style" rel="stylesheet" href="..\template/css/default.css" />
+    <link rel="stylesheet" href="..\template/css/custom.min.css" media="screen" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="https://github.com/Denchick/docstrings2html">docstring2html</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Start page</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Index</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#source_code">Source Code</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#instance_classes">Instance Classes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#methods">Methods</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1>strings_generator.py</h1>
+            <p class="lead">	Генерация списка случайных строк </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <p>	Генерация списка случайных строк </p>
+        <h2>
+          <a name="instance_classes">Instance Classes</a>
+        </h2>
+        <div class="jumbotron">
+          <h2>class StringGenerator</h2>
+          <p> Генератор случайных символов из списка chars диапазона size .</p>
+        </div>
+        <h2>
+          <a name="methods">Methods</a>
+        </h2>
+        <div class="jumbotron">
+          <h2>StringGenerator.__init__</h2>
+          <p>
+            <code>def __init__(self, has_digits, has_upper, has_lower, has_special, count, size)</code>
+          </p>
+          <pre class="description"> Генератор случайных символов из списка chars диапазона size </pre>
+        </div>
+        <div class="jumbotron">
+          <h2>StringGenerator.get_random_string</h2>
+          <p>
+            <code>def get_random_string(self)</code>
+          </p>
+          <pre class="description"> Генератор случайных символов из списка chars диапазона size </pre>
+        </div>
+        <div class="jumbotron">
+          <h2>StringGenerator.get_alphabet</h2>
+          <p>
+            <code>def get_alphabet(has_digits, has_upper, has_lower, has_special)</code>
+          </p>
+          <pre class="description"> Формирует алфавит для генерации строк </pre>
+        </div>
+        <div class="jumbotron">
+          <h2>StringGenerator.generate</h2>
+          <p>
+            <code>def generate(self)</code>
+          </p>
+          <pre class="description"> Генератор случайных строк </pre>
+        </div>
+      </div>
+      <h2>
+        <a name="source_code">Source code</a>
+      </h2>
+      <pre>
+        <code class="py">"""	Генерация списка случайных строк """
+import random
+import string
+import logging
+LOGGER_NAME = 'generators.strings_generator'
+LOGGER = logging.getLogger(LOGGER_NAME)
+
+
+class StringGenerator:
+    def __init__(self, has_digits, has_upper, has_lower, has_special, count, size):
+        self.alphabet = self.get_alphabet(has_digits, has_upper, has_lower, has_special)
+        self.count = count
+        self.size = size
+
+    def get_random_string(self):
+        """ Генератор случайных символов из списка chars диапазона size """
+        return ''.join(random.choice(self.alphabet) for _ in range(
+            random.randint(self.size[0], self.size[1])))
+
+    @staticmethod
+    def get_alphabet(has_digits, has_upper, has_lower, has_special):
+        """ Формирует алфавит для генерации строк """
+        chars = ''
+        if has_digits:
+            chars += string.digits
+        if has_lower:
+            chars += string.ascii_lowercase
+        if has_upper:
+            chars += string.ascii_uppercase
+        if has_special:
+            chars += string.punctuation
+        if not has_digits and not has_lower and not has_upper and not has_special:
+            chars = string.ascii_letters + string.digits + string.punctuation  # = digits + upper + lower + special
+            LOGGER.info('Строки будут состоять из цифр, строчных и прописных букв, специальных символов.')
+        return chars
+
+    def generate(self):
+        """ Генератор случайных строк """
+        LOGGER.info('Запуск генерации.')
+        result = [self.get_random_string() for _ in range(self.count)]
+        LOGGER.info('Сгенерировано {} строк длинами {}.'.format(self.count, self.size))
+        return result
+</code>
+      </pre>
+      <footer id="footer">
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="list-unstyled">
+              <li class="float-lg-right">
+                <a href="#top">Back to top</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+<script src="..\template/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>

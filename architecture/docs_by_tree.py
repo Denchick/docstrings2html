@@ -151,8 +151,12 @@ class CodeData:
             return annotation[0]
         return ''
 
+    def get_docstring(self):
+        return self.docstring
+
     def get_name(self):
         if self.signature.startswith('def') or self.signature.starts_with('class'):
-            return "{0}.{1}".format(
-                self.parent_name,
-                self.signature.replace('(', ' ').replace(':', ' ').split()[1])
+            signature = self.signature.replace('(', ' ').replace(':', ' ').split()[1]
+            if self.parent_name:
+                return "{0}.{1}".format(self.parent_name, signature)
+            return  signature

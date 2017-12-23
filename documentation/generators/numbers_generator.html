@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Documentation for numbers_generator.py</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http_equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="..\template/css/cyborg.bootstrap.min.css" media="screen" />
+    <link rel="stylesheet" href="..\template/css/cyborg.bootstrap.css" media="screen" />
+    <link id="highlight-style" rel="stylesheet" href="..\template/css/default.css" />
+    <link rel="stylesheet" href="..\template/css/custom.min.css" media="screen" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="https://github.com/Denchick/docstrings2html">docstring2html</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Start page</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Index</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#source_code">Source Code</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#instance_classes">Instance Classes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#methods">Methods</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1>numbers_generator.py</h1>
+            <p class="lead">	Генерация списка случайных чисел </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <p>	Генерация списка случайных чисел </p>
+        <h2>
+          <a name="instance_classes">Instance Classes</a>
+        </h2>
+        <div class="jumbotron">
+          <h2>class NumberGenerator</h2>
+          <p>Нельзя сгенерировать {} значений.</p>
+        </div>
+        <h2>
+          <a name="methods">Methods</a>
+        </h2>
+        <div class="jumbotron">
+          <h2>NumberGenerator.__init__</h2>
+          <p>
+            <code>def __init__(self, count, range_)</code>
+          </p>
+          <pre class="description">Нельзя сгенерировать {} значений</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>NumberGenerator.get_random_number</h2>
+          <p>
+            <code>def get_random_number(self)</code>
+          </p>
+          <pre class="description">Запуск генерации.</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>NumberGenerator.generate</h2>
+          <p>
+            <code>def generate(self)</code>
+          </p>
+          <pre class="description">Запуск генерации.</pre>
+        </div>
+      </div>
+      <h2>
+        <a name="source_code">Source code</a>
+      </h2>
+      <pre>
+        <code class="py">"""	Генерация списка случайных чисел """
+import random
+import string
+import logging
+LOGGER_NAME = 'generators.numbers_generator'
+LOGGER = logging.getLogger(LOGGER_NAME)
+
+
+class NumberGenerator:
+    def __init__(self, count, range_):
+        if count &lt; 0:
+            raise ValueError("Нельзя сгенерировать {} значений".format(count))
+        self.count = count
+        self.range = range_
+
+    def get_random_number(self):
+        return str(random.randint(self.range[0], self.range[1]))
+
+    def generate(self):
+        LOGGER.info('Запуск генерации.')
+        result = [self.get_random_number() for _ in range(self.count)]
+        LOGGER.info('Сгенерировано {} значений в диапазоне {}.'.format(self.count, self.range))
+        return result
+
+</code>
+      </pre>
+      <footer id="footer">
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="list-unstyled">
+              <li class="float-lg-right">
+                <a href="#top">Back to top</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+<script src="..\template/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>

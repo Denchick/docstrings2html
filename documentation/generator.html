@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Documentation for generator.py</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http_equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" href="template/css/cyborg.bootstrap.min.css" media="screen" />
+    <link rel="stylesheet" href="template/css/cyborg.bootstrap.css" media="screen" />
+    <link id="highlight-style" rel="stylesheet" href="template/css/default.css" />
+    <link rel="stylesheet" href="template/css/custom.min.css" media="screen" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="https://github.com/Denchick/docstrings2html">docstring2html</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Start page</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Index</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#source_code">Source Code</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#instance_classes">Instance Classes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#methods">Methods</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-8 col-md-7 col-sm-6">
+            <h1>generator.py</h1>
+            <p class="lead">Documentation for</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <h2>
+          <a name="instance_classes">Instance Classes</a>
+        </h2>
+        <h2>
+          <a name="methods">Methods</a>
+        </h2>
+        <div class="jumbotron">
+          <h2>parse_range</h2>
+          <p>
+            <code>def parse_range(range_as_string)</code>
+          </p>
+          <pre class="description"> Парсит строку с диапапазоном генерируемых значений </pre>
+        </div>
+        <div class="jumbotron">
+          <h2>write_to_file</h2>
+          <p>
+            <code>def write_to_file(list_data, separator, filename)</code>
+          </p>
+          <pre class="description"> Записывает данные в файл filename через разделитель separator.
+Если filename == None, то вывод направляется в stdout
+</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>generate_list_data</h2>
+          <p>
+            <code>def generate_list_data(args)</code>
+          </p>
+          <pre class="description"> По аргументам определяет, какой режим программы выбран и запускает генераторы. 
+Возвращается список строк - сгенерированные значения </pre>
+        </div>
+        <div class="jumbotron">
+          <h2>create_parser</h2>
+          <p>
+            <code>def create_parser()</code>
+          </p>
+          <pre class="description">Генератор случайных значений. 
+   По умолчанию генерирует 10 строк, состоящих из цифр, прописных и заглавных букв английского алфавита,
+   разделенных переносом строки.</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>create_number_subparser</h2>
+          <p>
+            <code>def create_number_subparser(subparsers)</code>
+          </p>
+          <pre class="description">Диапазон генерируемых чисел в формате (leftBorder, rightBorder). Границы включаются. 
+        По умолчанию (-100,100).</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>create_string_subparser</h2>
+          <p>
+            <code>def create_string_subparser(subparsers)</code>
+          </p>
+          <pre class="description">Диапазон длин генерируемых строк в формате (leftBorder, rightBorder). Границы включаются. 
+        По умолчанию (-100,100).</pre>
+        </div>
+        <div class="jumbotron">
+          <h2>main</h2>
+          <p>
+            <code>def main()</code>
+          </p>
+          <pre class="description">__main__</pre>
+        </div>
+      </div>
+      <h2>
+        <a name="source_code">Source code</a>
+      </h2>
+      <pre>
+        <code class="py">#!/usr/bin/env python3
+""" Генератор случайных значений """
+
+ERROR_EXCEPTION = 1
+ERROR_WRONG_SETTINGS = 2
+ERROR_PYTHON_VERSION = 3
+ERROR_MODULES_MISSING = 4
+
+import sys
+
+if sys.version_info &lt; (3, 0):
+    print('Используйте Python версии 3.0 и выше', file=sys.stderr)
+    sys.exit(ERROR_PYTHON_VERSION)
+
+import argparse
+import logging
+import re
+
+try:
+    from generators import numbers_generator, strings_generator
+except Exception as e:
+    print('Модули не найдены: "{}"'.format(e), file=sys.stderr)
+    sys.exit(ERROR_MODULES_MISSING)
+
+__version__ = '2.0'
+__author__ = 'Volkov Denis'
+__email__ = 'denchick1997@mail.ru'
+
+LOGGER_NAME = 'generator'
+LOGGER = LOGGER = logging.getLogger(LOGGER_NAME)
+
+
+def parse_range(range_as_string):
+    """ Парсит строку с диапапазоном генерируемых значений """
+    m = re.match(r'\((-?\d+),(-?\d+)\)$', range_as_string)
+    if not m:
+        raise ValueError('"{0}" не диапазон значений'.format(range_as_string))
+    a, b = int(m.group(1)), int(m.group(2))
+    if a &lt;= 0 or b &lt;= 0:
+        raise ValueError('Длина строки не может иметь не положительную длину: {}'
+                         .format(min(a, b)))
+    return min(a, b), max(a, b)
+
+
+def write_to_file(list_data, separator, filename):
+    """ Записывает данные в файл filename через разделитель separator.
+    Если filename == None, то вывод направляется в stdout
+    """
+    with open(filename, 'w') if filename else sys.stdout as output:
+        data = separator.join(list_data)
+        output.write(data)
+
+
+def generate_list_data(args):
+    """ По аргументам определяет, какой режим программы выбран и запускает генераторы. 
+    Возвращается список строк - сгенерированные значения """
+    if 'lowercase' in dir(args):
+        return strings_generator.StringGenerator(args.digits, args.uppercase, args.lowercase,
+                                                 args.special, args.count, args.range).generate()
+    return numbers_generator.NumberGenerator(args.count, args.range).generate()
+
+
+def create_parser():
+    description = """Генератор случайных значений. 
+    По умолчанию генерирует 10 строк, состоящих из цифр, прописных и заглавных букв английского алфавита,
+    разделенных переносом строки."""
+    parser = argparse.ArgumentParser(
+        description=description)
+
+    parser.add_argument(
+        '-o', '--output', type=str, help='Имя выходного файла. По умолчанию выход направлен в stdout.')
+    parser.add_argument(
+        '-s', '--separator', type=str, default='\n',
+        help='Разделитель между значениями. По умолчанию перевод строки - \\n.')
+    parser.add_argument(
+        '-c', '--count', type=int, default=10,
+        help='Количество генерируемых значений. По умолчанию 10.')
+    parser.add_argument(
+        '-d', '--debug',
+        action='store_true', help='Режим debug.', default=False)
+
+    subparsers = parser.add_subparsers(help='commands')
+    create_number_subparser(subparsers)
+    create_string_subparser(subparsers)
+
+    return parser.parse_args()
+
+
+def create_number_subparser(subparsers):
+    number_parser = subparsers.add_parser('numbers', help="Генарация чисел")
+    number_parser.add_argument(
+        '-r', '--range', type=parse_range, default=(-100, 100),
+        help="""Диапазон генерируемых чисел в формате (leftBorder, rightBorder). Границы включаются. 
+        По умолчанию (-100,100).""")
+
+
+def create_string_subparser(subparsers):
+    string_parser = subparsers.add_parser('strings', help="Генерация строк")
+    string_parser.add_argument(
+        '-r', '--range', type=parse_range, default=(-100, 100),
+        help="""Диапазон длин генерируемых строк в формате (leftBorder, rightBorder). Границы включаются. 
+        По умолчанию (-100,100).""")
+    string_parser.add_argument(
+        '-di', '--digits',
+        action='store_true', help='В алфавите генерации есть цифры.', default=False)
+    string_parser.add_argument(
+        '-up', '--uppercase',
+        action='store_true', help='В алфавите генерации есть прописные буквы.', default=False)
+    string_parser.add_argument(
+        '-lo', '--lowercase',
+        action='store_true', help='В алфавите генерации есть строчные буквы.', default=False)
+    string_parser.add_argument(
+        '-sp', '--special',
+        action='store_true', help='В алфавите генерации есть специальные символы из string.punctuation.', default=False)
+
+
+def main():
+    args = create_parser()
+
+    log = logging.StreamHandler(sys.stderr)
+    log.setFormatter(logging.Formatter(
+        '%(asctime)s [%(levelname)s &lt;%(name)s&gt;] %(message)s'))
+    for module in (sys.modules[__name__], strings_generator, numbers_generator):
+        logger = logging.getLogger(module.LOGGER_NAME)
+        logger.setLevel(logging.DEBUG if args.debug else logging.ERROR)
+        logger.addHandler(log)
+
+    LOGGER.info('Application is start.')
+
+    write_to_file(generate_list_data(args), args.separator, args.output)
+
+
+if __name__ == "__main__":
+    main()
+</code>
+      </pre>
+      <footer id="footer">
+        <div class="row">
+          <div class="col-lg-12">
+            <ul class="list-unstyled">
+              <li class="float-lg-right">
+                <a href="#top">Back to top</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+<script src="template/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
