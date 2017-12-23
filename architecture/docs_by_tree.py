@@ -17,7 +17,7 @@ class DocsByTree:
         self._documentation_nodes = []
         self.code = code
         self.module_description = self.get_module_description()
-        self.module_filename = module_name
+        self.module_filename = module_name.replace('\\', ' ').replace('/', ' ').split()[-1]
         self.code_lines = code_lines
         self._add_documentation(self.tree.get_root(), None)
 
@@ -43,7 +43,7 @@ class DocsByTree:
     def _get_signature(code_lines, signature_index):
         index = signature_index
         result = ''
-        while True:
+        while index < len(code_lines):
             current_line = code_lines[index].strip()
             result += current_line
             if current_line.endswith(':'):

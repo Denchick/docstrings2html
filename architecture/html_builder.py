@@ -19,10 +19,10 @@ class HtmlBuilder:
 
     def get_source_path(self, source_name):
         if source_name.endswith('css'):
-            return '{0}css/{1}'.format(self.path, source_name)
+            return '{0}/css/{1}'.format(self.path, source_name)
         if source_name.endswith('js'):
-            return '{0}js/{1}'.format(self.path, source_name)
-        return '{0}{1}'.format(self.path, source_name)
+            return '{0}/js/{1}'.format(self.path, source_name)
+        return '{0}/{1}'.format(self.path, source_name)
 
     def get_html(self):
         """ должен возвращать сформированную html-документацию """
