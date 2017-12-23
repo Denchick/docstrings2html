@@ -4,6 +4,7 @@ from architecture import code_tree
 from architecture.code_tree import CodeTree
 from architecture.docs_by_tree import DocsByTree
 from architecture.html_builder import HtmlBuilder
+from architecture.linker import Linker
 
 ERROR_EXCEPTION = 1
 ERROR_WRONG_SETTINGS = 2
@@ -36,13 +37,12 @@ LOGGER = logging.getLogger(LOGGER_NAME)
 def create_parser():
     """ Разбор аргументов командной строки """
     parser = argparse.ArgumentParser(
-        description="""Создает HTML-документацию для модуля или файла в файле в текущей директории.""")
+        description="""Создает HTML-документацию для модуля или файла .""")
     parser.add_argument(
-        'filename', type=str,
-        help="""Путь до файла.""")
+        '-f', '--files', nargs='+', type=str, help="Пути до файлов или пакетов")
     parser.add_argument(
-        '-o', '--output', type=str,
-        help="""Название файла.""")
+        '-o', '--output', type=str, default='documentation',
+        help="""Путь до директории, куда сохранить результат.""")
     parser.add_argument(
         '-d', '--debug', action='store_true', default=False,
         help="""Режим debug.""")
@@ -68,25 +68,7 @@ def main():
     logger.setLevel(logging.DEBUG if args.debug else logging.ERROR)
     logger.addHandler(log)
 
-    builder(args.filename)
-
-
-def get_code(code_filename):
-    with open(code_filename, 'r', encoding='utf-8') as f:
-        return f.read()
-
-
-def builder(code_filename):
-    code = get_code(code_filename)
-    code_lines = code.split('\n')
-    tree = CodeTree(code_lines)
-    docs = DocsByTree(tree, code_lines, code, code_filename)
-    html_obj = HtmlBuilder(docs, '')
-
-    out = html_obj.get_html()
-    print(out)
-    with open(r'C:\Users\Volkov\YandexDisk\Python_курс\docstrings2html\template\index.html', 'w') as f:
-        f.write(out)
+    Linker(args.output, args.files)
 
 if __name__ == "__main__":
     main()
