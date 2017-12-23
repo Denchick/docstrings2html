@@ -71,10 +71,6 @@ def main():
     logger.setLevel(logging.DEBUG if args.debug else logging.ERROR)
     logger.addHandler(log)
 
-    if not args.files and args.output:
-        # в идеале - писать в log
-        raise RuntimeError
-
     Linker(args.output, args.files)
 
 if __name__ == "__main__":
