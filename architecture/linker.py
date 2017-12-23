@@ -1,13 +1,8 @@
-import fnmatch
-import sys
 
 from architecture.code_tree import CodeTree
 from architecture.docs_by_tree import DocsByTree
 from architecture.html_builder import HtmlBuilder
-import shutil, os
-
-
-
+import shutil, os, sys
 
 class Linker:
 
@@ -15,7 +10,7 @@ class Linker:
 
         if self.check_input_is_a_packet(args):
             self.copy_source_directory(args[0], path)
-            self.create_template_folders(path)
+            self.copy_template_folders(path)
             exit()
             for filename in self.walk_through_files(path):
                 print(filename)
@@ -31,7 +26,7 @@ class Linker:
             self.save_generated_file(None, html)
 
         else:
-            self.create_template_folders(path)
+            self.copy_template_folders(path)
             for filename in args:
                 source_code = self.get_source_code(filename)
                 html = self.get_html_code(source_code, filename)
@@ -43,8 +38,8 @@ class Linker:
     def ckeck_input_is_a_stdin(self, *args):
         return args is None
 
-    def create_template_folders(self, path):
-        shutil.copytree('./template', path)
+    def copy_template_folders(self, path):
+        shutil.copytree('./template', os.path.join(path, 'template'))
 
     def get_source_code(self, filename):
         with open(filename, 'r', encoding='utf-8') if filename else sys.stdin as f:
