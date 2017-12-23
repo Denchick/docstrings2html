@@ -28,8 +28,8 @@ class Linker:
             shutil.copytree('./{0}'.format(self.template_directory), os.path.join(path, self.template_directory))
             for filename in args:
                 source_code = utils.get_text_from_file(filename)
-                html = self.get_module_html_code(source_code, filename, '')
-                utils.write_to_file(os.path.join(path, '{0}.html'.format(filename)), html)
+                html = self.get_module_html_code(source_code, filename, '', self.template_directory)
+                utils.write_to_file(os.path.join(path, '{0}.html'.format(filename[:-3])), html)
             self.create_index_pages(path)
 
     def check_input_is_a_packet(self, args):
