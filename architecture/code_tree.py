@@ -54,7 +54,7 @@ class TreeNode:
                 return i
 
             next_fragment = self.nested_nodes[i + 1].code_fragment
-            #засунуть сразу после
+            # засунуть сразу после
             if current_fragment.last_line <= fragment.first_line and \
                 fragment.last_line <= next_fragment.first_line:
                 return i + 1
@@ -66,7 +66,6 @@ class TreeNode:
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
-
 
 
 class CodeTree:
