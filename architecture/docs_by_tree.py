@@ -17,7 +17,9 @@ class DocsByTree:
         self._documentation_nodes = []
         self.code = code
         self.module_description = self.get_module_description()
-        self.module_filename = module_name.replace('\\', ' ').replace('/', ' ').split()[-1]
+        self.module_filename = ''
+        if module_name:
+            self.module_filename = module_name.replace('\\', ' ').replace('/', ' ').split()[-1]
         self.code_lines = code_lines
         self._add_documentation(self.tree.get_root(), None)
 

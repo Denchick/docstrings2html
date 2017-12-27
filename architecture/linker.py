@@ -21,22 +21,22 @@ class Linker:
 
         elif self.ckeck_input_is_a_stdin(args):
             source_code = utils.get_text_from_file(None)
-            html = self.get_module_html_code(source_code, None)
-            utils.write_to_file(None, html)
+            html_code = self.get_module_html_code(source_code, '', '', '')
+            utils.write_to_file(None, html_code)
 
         else:
             shutil.copytree('./{0}'.format(self.template_directory), os.path.join(path, self.template_directory))
             for filename in args:
                 source_code = utils.get_text_from_file(filename)
-                html = self.get_module_html_code(source_code, filename, '')
-                utils.write_to_file(os.path.join(path, '{0}.html'.format(filename)), html)
+                html = self.get_module_html_code(source_code, filename, '', self.template_directory)
+                utils.write_to_file(os.path.join(path, '{0}.html'.format(filename[:-3])), html)
             self.create_index_pages(path)
 
     def check_input_is_a_packet(self, args):
         return args and len(args) == 1 and os.path.isdir(args[0])
 
     def ckeck_input_is_a_stdin(self, *args):
-        return args is None
+        return args 
 
     def get_module_html_code(self, source_code, filename, path_to_root, path_to_template):
         code_lines = source_code.split('\n')

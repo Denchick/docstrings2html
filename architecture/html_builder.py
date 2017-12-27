@@ -39,6 +39,7 @@ class HtmlBuilder:
                     text('Documentation for {0}'.format(self.module_name))
                 doc.stag('meta', name="viewport", content="width=device-width, initial-scale=1")
                 doc.stag('meta', http_equiv="X-UA-Compatible", content="IE=edge")
+                doc.stag('meta', charset="utf-8")
                 doc.stag('link', rel="stylesheet", href=self.get_path_to_source(self.path_to_template_root, "cyborg.bootstrap.min.css"), media="screen")
                 doc.stag('link', rel="stylesheet", href=self.get_path_to_source(self.path_to_template_root, "cyborg.bootstrap.css"), media="screen")
                 doc.stag('link', id="highlight-style", rel="stylesheet", href=self.get_path_to_source(self.path_to_template_root, "default.css"))
@@ -49,7 +50,7 @@ class HtmlBuilder:
                 with tag('nav', klass="navbar navbar-expand-lg fixed-top navbar-dark bg-dark"):
                     with tag('div', klass="container"):
                         with tag('a', klass="navbar-brand", href="https://github.com/Denchick/docstrings2html"):
-                            text('docstring2html')
+                            text('docstrings2html')
 
                         with tag('div', klass ="collapse navbar-collapse", id="navbarSupportedContent"):
                             with tag('ul', klass="nav navbar-nav ml-auto"):
@@ -144,6 +145,7 @@ class HtmlBuilder:
                     text('Documentation for {0}'.format(path_to_template_root))
                 doc.stag('meta', name="viewport", content="width=device-width, initial-scale=1")
                 doc.stag('meta', http_equiv="X-UA-Compatible", content="IE=edge")
+                doc.stag('meta', charset="utf-8")
                 doc.stag('link', rel="stylesheet", href=HtmlBuilder.get_path_to_source(path_to_template_root, "cyborg.bootstrap.min.css"), media="screen")
                 doc.stag('link', rel="stylesheet", href=HtmlBuilder.get_path_to_source(path_to_template_root, "cyborg.bootstrap.css"), media="screen")
                 doc.stag('link', rel="stylesheet", href=HtmlBuilder.get_path_to_source(path_to_template_root, "custom.min.css"), media="screen")
@@ -153,7 +155,7 @@ class HtmlBuilder:
                 with tag('nav', klass="navbar navbar-expand-lg fixed-top navbar-dark bg-dark"):
                     with tag('div', klass="container"):
                         with tag('a', klass="navbar-brand", href="https://github.com/Denchick/docstrings2html"):
-                            text('docstring2html')
+                            text('docstrings2html')
 
                         with tag('div', klass="collapse navbar-collapse", id="navbarSupportedContent"):
                             with tag('ul', klass="nav navbar-nav ml-auto"):
