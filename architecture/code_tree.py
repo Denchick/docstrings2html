@@ -11,7 +11,9 @@ class TreeNode:
 
     def add_fragment(self, code_fragment):
         if not isinstance(code_fragment, Fragment):
-            raise AttributeError("code_fragments expected Fragment but got {0}".format(type(code_fragment)))
+            message = "code_fragments expected Fragment but got {0}".format(
+                type(code_fragment))
+            raise AttributeError(message)
 
         if not self.nested_nodes:
             self.nested_nodes.append(TreeNode(code_fragment))
@@ -28,15 +30,18 @@ class TreeNode:
             return
         self.nested_nodes.insert(index, TreeNode(code_fragment))
 
-    def _find_where_to_insert_node(self, code_fragment):
-        if not isinstance(code_fragment, Fragment):
-            AttributeError("Expected get Fragment type, but {0}".format(type(code_fragment)))
+    def _find_where_to_insert_node(self, fragment):
+        if not isinstance(fragment, Fragment):
+            message = "Expected get Fragment type, but {0}".format(
+                type(fragment))
+            AttributeError(message)
 
-        if len(self.nested_nodes) == 0:
+        if not self.nested_nodes or \
+                        fragment.last_line <= \
+                        self.nested_nodes[0].code_fragment.first_line:
             return 0
-        if code_fragment.last_line <= self.nested_nodes[0].code_fragment.first_line:
-            return 0
-        if self.nested_nodes[-1].code_fragment.last_line <= code_fragment.first_line:
+        if self.nested_nodes[-1].code_fragment.last_line <= \
+                fragment.first_line:
             return len(self.nested_nodes)
 
         for i in range(len(self.nested_nodes)):
@@ -44,14 +49,14 @@ class TreeNode:
             current_fragment = current_node.code_fragment
 
             # засунуть вовнутрь
-            if current_fragment.first_line <= code_fragment.first_line and \
-                            code_fragment.last_line <= current_fragment.last_line:
+            if current_fragment.first_line <= fragment.first_line and \
+                            fragment.last_line <= current_fragment.last_line:
                 return i
 
             next_fragment = self.nested_nodes[i + 1].code_fragment
             #засунуть сразу после
-            if current_fragment.last_line <= code_fragment.first_line and \
-                code_fragment.last_line <= next_fragment.first_line:
+            if current_fragment.last_line <= fragment.first_line and \
+                fragment.last_line <= next_fragment.first_line:
                 return i + 1
 
         raise RuntimeError("Didnt find where to insert")
