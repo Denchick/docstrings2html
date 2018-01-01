@@ -69,7 +69,7 @@ class HtmlBuilder:
                         with tag('a', klass="navbar-brand", href="https://github.com/Denchick/docstrings2html"):
                             text('docstrings2html')
 
-                        with tag('div', klass ="collapse navbar-collapse",
+                        with tag('div', klass="collapse navbar-collapse",
                                  id="navbarSupportedContent"):
                             with tag('ul', klass="nav navbar-nav ml-auto"):
                                 with tag('li', klass="nav-item"):
@@ -107,7 +107,7 @@ class HtmlBuilder:
                                 with tag('p', klass="lead"):
                                     text("Documentation for")
 
-                    #Content
+                    # Content
                     with tag('div', klass='col-lg-12'):
 
                         if self.module_description:
@@ -137,7 +137,7 @@ class HtmlBuilder:
                                 with tag('pre', klass="description"):
                                     text(m.docstring)
 
-                    #Source code
+                    # Source code
                     with tag('h2'):
                         with tag('a', name="source_code"):
                             text('Source code')

@@ -2,7 +2,9 @@ from architecture import utils
 from architecture.code_tree import CodeTree
 from architecture.docs_by_tree import DocsByTree
 from architecture.html_builder import HtmlBuilder
-import shutil, os, sys
+import shutil
+import os
+
 
 class Linker:
     def __init__(self, path, args):
@@ -76,7 +78,7 @@ class Linker:
             dirs = os.listdir(dirpath)
             if dirpath == path:
                 dirs.remove(self.template_directory)
-            joined= os.path.join(path, self.template_directory)
+            joined = os.path.join(path, self.template_directory)
             relative_path_to_template = os.path.relpath(joined, dirpath)
             html = self.html_builder.get_index_page_html(
                 relative_path_to_template,

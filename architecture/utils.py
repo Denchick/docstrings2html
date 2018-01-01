@@ -45,6 +45,6 @@ def walk_through_directories(path):
             yield os.path.join(dirpath, dirname)
 
 
-def write_to_file(filename, text):
-    with open(filename, 'w', encoding='utf-8') if filename else sys.stdout as f:
+def write_to_file(name, text):
+    with open(name, 'w', encoding='utf-8') if name else sys.stdout as f:
         f.write(text)

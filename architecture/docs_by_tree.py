@@ -31,8 +31,9 @@ class DocsByTree:
         self._add_documentation(self.tree.get_root(), None)
 
     def _add_documentation(self, node, parent_node):
-        """ Добавляет документацию по node(TreeNode) в список self._documentation_nodes
-        Для каждого ребенка текущего node вызывается метод self._add_documentation
+        """ Добавляет документацию по node(TreeNode) в список
+        self._documentation_nodes. Для каждого ребенка текущего
+        node вызывается метод self._add_documentation
         с соответствующими параметрами """
 
         error_message = '{0} must be a TreeNode type, but got type {1}'
@@ -176,6 +177,7 @@ class DocsByTree:
             return result.group(1)
         return ''
 
+
 class CodeData:
     def __init__(self,
                  fragment,
@@ -210,7 +212,9 @@ class CodeData:
             raise AttributeError(error_msg.format('"parent_signature"',
                                                   'str',
                                                   type(parent_signature)))
-        self._parent_name = self._get_name(parent_signature) if fragment.type != 'file' else ''
+        self._parent_name = self._get_name(parent_signature) \
+            if fragment.type != 'file' \
+            else ''
 
     @staticmethod
     def _get_name(signature):

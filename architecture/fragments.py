@@ -20,8 +20,6 @@ class Fragment:
         return self.__dict__ == other.__dict__
 
 
-
-
 class FragmentsParser:
 
     def __init__(self, code_lines):
@@ -40,7 +38,7 @@ class FragmentsParser:
             first_word_in_line = \
                 self.get_first_word_in_line(self.code_lines[line_index])
 
-            if first_word_in_line == None:
+            if first_word_in_line is None:
                 continue
 
             if current_code_nesting > line_nesting:
