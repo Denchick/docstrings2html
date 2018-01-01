@@ -1,20 +1,13 @@
-"""
-FragmentsParser позволяет распарсить код на фрагменты:
-файл, классы и функции
-"""
 
 
 class Fragment:
 
-    def __init__(self, first_line: int, last_line: int, type_fragment: str, nesting: int):
-        """
-        Один логический кусок кода - функция, класс или весь файл
-
-        :param first_line: номер строчки кода, с которой начинается фрагмент
-        :param last_line: номер строчки кода, на которой заканчивается фрагмент
-        :param type_fragment: тип этого фрагмента - класс, функция, etc
-        :param nesting: вложенность фрагмента - количество "пробелов" перед сигнатурой фрагмента
-        """
+    def __init__(self,
+                 first_line: int,
+                 last_line: int,
+                 type_fragment: str,
+                 nesting: int):
+        """ Один логический кусок кода - функция, класс или весь файл """
         self.first_line = first_line
         self.last_line = last_line
         self.type = type_fragment
@@ -32,10 +25,7 @@ class Fragment:
 class FragmentsParser:
 
     def __init__(self, code_lines):
-        """
-        Парсер кода на фрагменты
-        :param code_lines: список строк кода
-        """
+        """ Парсер кода на фрагменты классы и функции """
         self.code_lines = code_lines
         self.key_words = ['class', 'def']
 
@@ -45,8 +35,10 @@ class FragmentsParser:
         current_code_nesting = 0
 
         for line_index in range(len(self.code_lines)):
-            line_nesting = self.get_nesting_of_line(self.code_lines[line_index])
-            first_word_in_line = self.get_first_word_in_line(self.code_lines[line_index])
+            line_nesting = \
+                self.get_nesting_of_line(self.code_lines[line_index])
+            first_word_in_line = \
+                self.get_first_word_in_line(self.code_lines[line_index])
 
             if first_word_in_line == None:
                 continue

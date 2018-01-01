@@ -46,5 +46,5 @@ def walk_through_directories(path):
 
 
 def write_to_file(filename, text):
-    with open(filename, 'w') if filename else sys.stdout as f:
+    with open(filename, 'w', encoding='utf-8') if filename else sys.stdout as f:
         f.write(text)

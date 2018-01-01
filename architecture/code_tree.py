@@ -10,6 +10,7 @@ class TreeNode:
         self.nested_nodes = [] if nested_nodes is None else nested_nodes
 
     def add_fragment(self, code_fragment):
+        """ Добавить фрагмент во внутрь другого фрагмента """
         if not isinstance(code_fragment, Fragment):
             message = "code_fragments expected Fragment but got {0}".format(
                 type(code_fragment))
@@ -56,7 +57,7 @@ class TreeNode:
             next_fragment = self.nested_nodes[i + 1].code_fragment
             # засунуть сразу после
             if current_fragment.last_line <= fragment.first_line and \
-                fragment.last_line <= next_fragment.first_line:
+                            fragment.last_line <= next_fragment.first_line:
                 return i + 1
 
         raise RuntimeError("Didnt find where to insert")
@@ -71,11 +72,7 @@ class TreeNode:
 class CodeTree:
 
     def __init__(self, code_lines):
-        """
-        Иерархическое дерево кода
-
-        :param code_lines_count: количество строк в тектовом файле
-        """
+        """ Иерархическое дерево кода """
         fragment = Fragment(0, len(code_lines), 'file', 0)
         self._root = TreeNode(fragment)
         self.code_lines = code_lines

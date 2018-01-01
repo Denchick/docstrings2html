@@ -1,48 +1,79 @@
 """ Внутри построенного по коду дерева, этот модуль составляет
-документацию для "компонента" кода. По сути - строит набор полей """
+документацию code fragments. По сути - строит набор полей """
 
 import re
-
 from architecture import code_tree
+from architecture.fragments import Fragment
 
 
 class DocsByTree:
+    """ Формирует список CodeData по построенному дереву кода """
     def __init__(self, tree, code_lines, code, module_name):
+        error_message = '{0} must be a {1} type, but got type {2}'
         if not isinstance(tree, code_tree.CodeTree):
-            raise AttributeError
-        self.tree = tree
+            raise AttributeError(error_message.format('tree',
+                                                      'CodeTree',
+                                                      type(tree)))
         if not isinstance(code_lines, list):
-            raise AttributeError
-
+            raise AttributeError(error_message.format('code_lines',
+                                                      'list',
+                                                      type(code_lines)))
+        self.tree = tree
         self._documentation_nodes = []
         self.code = code
         self.module_description = self.get_module_description()
-        self.module_filename = ''
+        self.module_name = ''
         if module_name:
-            self.module_filename = module_name.replace('\\', ' ').replace('/', ' ').split()[-1]
+            self.module_name = \
+                module_name.replace('\\', ' ').replace('/', ' ').split()[-1]
+
         self.code_lines = code_lines
         self._add_documentation(self.tree.get_root(), None)
 
     def _add_documentation(self, node, parent_node):
+        """ Добавляет документацию по node(TreeNode) в список self._documentation_nodes
+        Для каждого ребенка текущего node вызывается метод self._add_documentation
+        с соответствующими параметрами """
+
+        error_message = '{0} must be a TreeNode type, but got type {1}'
         if not isinstance(node, code_tree.TreeNode):
-            raise AttributeError
-        if parent_node is not None and not isinstance(parent_node, code_tree.TreeNode):
-            raise AttributeError
+            raise AttributeError(error_message.format('node', type(node)))
+        if parent_node and not isinstance(parent_node, code_tree.TreeNode):
+            raise AttributeError(error_message.format('parent_node',
+                                                      type(parent_node)))
 
         code_data = CodeData(node.code_fragment,
-                             self.module_filename,
-                             self._get_signature(self.code_lines, node.code_fragment.first_line),
-                             self._get_docstring(self.code_lines, node.code_fragment.first_line),
-                             self.get_fragments_names_of_this_type(node, 'class'),
-                             self.get_fragments_names_of_this_type(node, 'def'),
-                             self.get_tree_node_name(parent_node))
+                             self.module_name,
+                             self.get_signature(
+                                 self.code_lines,
+                                 node.code_fragment.first_line),
+                             self._get_docstring(
+                                 self.code_lines,
+                                 node.code_fragment.first_line),
+                             self.get_signature(self.code_lines, parent_node.code_fragment.first_line))
+
+        if code_data.name.startswith('__') and code_data.name != '__init__':
+            return
 
         self._documentation_nodes.append(code_data)
         for current_node in node.nested_nodes:
             self._add_documentation(current_node, node)
 
     @staticmethod
-    def _get_signature(code_lines, signature_index):
+    def get_signature(code_lines, signature_index):
+        """ Достает сигнатуру метода. Для деталей работы смотри тесты
+        из test_docs_by_tree.py.
+
+        Args:
+            code_lines (list<str>): исходный код модуля
+                в виде списка строк
+            signature_index (int): индекс строки, в которой
+                начинается сигнатура метода
+
+        Returns:
+            Корректную сигнатуру метода в виде одной строки
+            без отступов, множественных пробелов и переносов строк
+        """
         index = signature_index
         result = ''
         while index < len(code_lines):
@@ -55,27 +86,61 @@ class DocsByTree:
             index += 1
         return result[:-1]
 
-    def get_methods(self):
-        return [doc_node for doc_node in self.get_documentation_nodes() if doc_node.fragment.type == 'def']
+    def get_all_methods_from_nodes(self):
+        return [doc_node
+                for doc_node in self.documentation_nodes
+                if doc_node.type == 'def']
 
-    def get_classes(self):
-        return [doc_node for doc_node in self.get_documentation_nodes() if doc_node.fragment.type == 'class']
+    def get_all_classes_from_nodes(self):
+        return [doc_node
+                for doc_node in self.documentation_nodes
+                if doc_node.type == 'class']
 
     @staticmethod
     def _get_docstring(code_lines, signature_index):
+        """ Достает docstrings сразу после сигнатуры метода.
+        Для деталей работы смотри тесты из test_docs_by_tree.
+
+        Args:
+            code_lines (list<str>): исходный код модуля
+                в виде списка строк
+            signature_index (int): индекс строки, в которой
+                начинается сигнатура метода
+
+        Returns:
+            Коректный docstring в виде одной строки, без ковычек
+            и отступа перед docstring. Для деталей смотри
+            test_docs_by_tree.py
+        """
         docstring = DocsByTree._get_raw_docstring(code_lines, signature_index)
-        nesting = len(docstring) -len(docstring.lstrip())
-        lines = [DocsByTree._get_docstring_without_quotes(line[nesting:])  for line in docstring.split('\n')]
+        nesting = len(docstring) - len(docstring.lstrip())
+        lines = [line[nesting:].strip('"\'') for line in docstring.split('\n')]
         return '\n'.join(lines)
 
     @staticmethod
     def _get_raw_docstring(code_lines, signature_index):
+        """ Просто получает первую строку внутри двойных, тройных или
+        одинарных ковычек - что попадется раньше. Никак не
+        обрабатывает получученный текст, просто его возвращает.
+
+        Args:
+            code_lines (list<str>): исходный код модуля
+                в виде списка строк
+            signature_index (int): индекс строки, в которой
+                начинается сигнатура метода
+
+        Returns:
+            Первое совпадение с шаблоном docstring - первый
+            текст внутри кавычек. Если ничего нет, возвращается
+            пустая строка.
+        """
         code = '\n'.join(code_lines[signature_index:])
 
         pattern1 = r'([\ ]*"""[\S\s]*?""")'
         pattern2 = r'([\ ]*"[\S\s]*?")'
         pattern3 = r"([\ ]*'[\S\s]*?')"
         re_result = re.search(pattern1, code)
+
         if re_result:
             return re_result.group(1)
         re_result = re.search(pattern2, code)
@@ -84,81 +149,104 @@ class DocsByTree:
         re_result = re.search(pattern3, code)
         if re_result:
             return re_result.group(1)
-        return "empty"
+        return ''
 
-    @staticmethod
-    def _get_docstring_without_quotes(docstring):
-        return docstring.strip('"\'')
-
-    def get_documentation_nodes(self):
+    @property
+    def documentation_nodes(self):
         return self._documentation_nodes
 
-    def get_fragments_names_of_this_type(self, tree_node, type):
-        if not isinstance(type, str):
-            raise AttributeError
-        return [self._get_name(f.code_fragment, 'kek') for f in tree_node.nested_nodes if f.code_fragment.type == type]
-
     @staticmethod
-    def _get_name(self, signature):
-        # переделать!
-        return 'signature'
-        pattern1 = "def ([\s\w]*)\(([\s\w!\"#$%&\'()*+,\-\./:;<=>?@[\\\]^_`{|}~]*)\):"
-        result = re.search(pattern, signature).group(0)
-        if result:
-            return result
-        pattern2 = "class ([\s\w]*)\(([\s\w!\"#$%&\'()*+,\-\./:;<=>?@[\\\]^_`{|}~]*)\):"
-        result = re.search(pattern, signature).group(0)
-        if result:
-            return result
-        return 'елки-палки, дичь какая-то! ' + signature
-        #return self.code_lines[fragment.first_line].strip().replace(':', ' ').replace('(', ' ').split()[1]
+    def get_module_description(source_code):
+        pattern1 = r'[\ ]*"""([\S\s]*?)"""'
+        pattern2 = r'[\ ]*"([\S\s]*?)"'
+        pattern3 = r"[\ ]*'([\S\s]*?)'"
+        result = re.search(pattern1, source_code)
 
-    def get_module_description(self):
-        pattern1 = r'^\s*"""([\w\s.,\/#!$%\^&\*;:{}=\-_`~()]*)"""'
-        pattern2 = r'^\s*"([\w\s.,\/#!$%\^&\*;:{}=\-_`~()]*)"'
-        pattern3 = r"^\s*'([\w\s.,\/#!$%\^&\*;:{}=\-_`~()]*)'"
-        result = re.search(pattern1, self.code)
         if result:
             return result.group(1)
-        result = re.search(pattern2, self.code)
+        result = re.search(pattern2, source_code)
         if result:
             return result.group(1)
-        result = re.search(pattern3, self.code)
+        result = re.search(pattern3, source_code)
         if result:
             return result.group(1)
-        return result
-
-    def get_tree_node_name(self, tree_node):
-        if tree_node is None:
-            return ''
-        first_line = self.code_lines[tree_node.code_fragment.first_line]
-        first_line = first_line.replace(':', ' ').replace('(', ' ')
-        if 'def' in first_line or 'class' in first_line:
-            return first_line.split()[1]
+        return ''
 
 class CodeData:
-    def __init__(self, fragment, filename, signature, docstring, classes, functions, parent_name):
-        self.fragment = fragment
-        self.filename = filename
-        self.signature = signature
-        self.docstring = docstring
-        self.classes = classes
-        self.functions = functions
-        self.parent_name = parent_name
+    def __init__(self,
+                 fragment,
+                 module_name,
+                 signature,
+                 docstring,
+                 parent_signature):
+        """ Единица сформированный документации. По сути -
+        просто объект с набором полей для хранения. """
+        error_msg = '{0} must be a {1} type, but got type {2}'
+        if not isinstance(fragment, Fragment):
+            raise AttributeError(error_msg.format('"fragment"',
+                                                  'Fragment',
+                                                  type(fragment)))
+        self._fragment = fragment
+        if not isinstance(module_name, str):
+            raise AttributeError(error_msg.format('"module_name"',
+                                                  'str',
+                                                  type(module_name)))
+        self._module_name = module_name
+        if not isinstance(signature, str):
+            raise AttributeError(error_msg.format('"signature"',
+                                                  'str',
+                                                  type(signature)))
+        self._signature = signature
+        if not isinstance(docstring, str):
+            raise AttributeError(error_msg.format('"docstring"',
+                                                  'str',
+                                                  type(docstring)))
+        self._docstring = docstring
+        if not isinstance(parent_signature, str):
+            raise AttributeError(error_msg.format('"parent_signature"',
+                                                  'str',
+                                                  type(parent_signature)))
+        self._parent_name = self._get_name(parent_signature)
+
+    @staticmethod
+    def _get_name(signature):
+        """ Название фрагмента CodeData.
+        Если функция или класс, то соответсвенно его название.
+        Если целый файл, то его название. """
+        if signature.startswith('def') or signature.startswith('class'):
+            new_sign = signature.replace('(', ' ').replace(':', ' ')
+            return new_sign.split()[1]
+
+    @property
+    def module_name(self):
+        return self._module_name
+
+    @property
+    def signature(self):
+        return self._signature
+
+    @property
+    def docstring(self):
+        return self._docstring
+
+    @property
+    def parent_name(self):
+        return self._parent_name
+
+    @property
+    def type(self):
+        return self._fragment.type
+
+    @property
+    def name(self):
+        if self.parent_name:
+            return '{0}.{1}'.format(self.parent_name,
+                                    self._get_name(self.signature))
+        return self._get_name(self.signature)
 
     def get_annotation(self):
-        """ короткое описание фрагмента """
-        annotation = self.docstring.split('.')
+        """ Короткое описание CodeData """
+        annotation = self._docstring.split('.')
         if len(annotation) > 0:
             return annotation[0]
         return ''
-
-    def get_docstring(self):
-        return self.docstring
-
-    def get_name(self):
-        if self.signature.startswith('def') or self.signature.starts_with('class'):
-            signature = self.signature.replace('(', ' ').replace(':', ' ').split()[1]
-            if self.parent_name:
-                return "{0}.{1}".format(self.parent_name, signature)
-            return  signature
