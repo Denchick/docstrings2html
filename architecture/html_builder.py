@@ -105,9 +105,7 @@ class HtmlBuilder:
                                 with tag('h1'):
                                     text(self.module_name)
                                 with tag('p', klass="lead"):
-                                    text(self.module_description
-                                         if self.module_description
-                                         else "Documentation for")
+                                    text("Documentation for")
 
                     #Content
                     with tag('div', klass='col-lg-12'):
@@ -122,7 +120,7 @@ class HtmlBuilder:
                         for m in self.docs.get_all_classes_from_nodes():
                             with tag('div', klass="jumbotron"):
                                 with tag('h2'):
-                                    text(m.signature)
+                                    text(m.name)
                                 with tag('p'):
                                     text(m.get_annotation())
 

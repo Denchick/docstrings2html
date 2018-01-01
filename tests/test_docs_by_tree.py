@@ -99,7 +99,7 @@ class TestDocByTree(unittest.TestCase):
         self.assertEqual(DocsByTree.get_module_description(source_code), expected)
 
     def test_module_description_when_there_is_description_in_the_top(self):
-        source_code = """\"\"\"Description\"\"\"
+        source_code = """'Description'
         some code"""
         expected = 'Description'
         self.assertEqual(DocsByTree.get_module_description(source_code), expected)
@@ -109,16 +109,25 @@ class TestDocByTree(unittest.TestCase):
         
         \"\"\"Description\"\"\"
         some code"""
-        expected = 'Description'
+        expected = ''
         self.assertEqual(DocsByTree.get_module_description(source_code), expected)
 
-    def test_module_description_when_there_is_description_not_in_the_top_but_not_first(self):
+    def test_moduleDescription_whenThereIsDescriptionNotInTheTop_butNotFirst(self):
         source_code = """#!/usr/bin/env python3
 
         \"\"\"Description\"\"\"
         some code"""
-        expected = 'Description'
+        expected = ''
         self.assertEqual(DocsByTree.get_module_description(source_code), expected)
+
+    def test_moduleDescription_when_there_is_description_not_in_the_top_but_not_first(self):
+        source_code = """#!/usr/bin/env python3
+        class kek:
+            \"\"\"Description\"\"\"
+            some code"""
+        expected = ''
+        self.assertEqual(DocsByTree.get_module_description(source_code), expected)
+
 
     def test_CodeDataConstructor_shouldRaiseError_whenFragmentIsNotFragment(self):
         with self.assertRaises(AttributeError):
@@ -144,7 +153,7 @@ class TestDocByTree(unittest.TestCase):
         self.assertEqual(CodeData._get_name('class signature:'), 'signature')
 
     def test_CodeData_getName_ShouldReturnNone_whenNotClassOrDef(self):
-        self.assertEqual(CodeData._get_name('kek signature:'), None)
+        self.assertEqual(CodeData._get_name('kek signature:'), '')
 
     def test_CodeDataProperties(self):
         cd = CodeData(Fragment(0, 0, '', 0), 'module_name', 'class signature', 'docstring', 'class parent_name:')

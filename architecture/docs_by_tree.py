@@ -21,7 +21,7 @@ class DocsByTree:
         self.tree = tree
         self._documentation_nodes = []
         self.code = code
-        self.module_description = self.get_module_description()
+        self.module_description = self.get_module_description(self.code)
         self.module_name = ''
         if module_name:
             self.module_name = \
@@ -41,7 +41,11 @@ class DocsByTree:
         if parent_node and not isinstance(parent_node, code_tree.TreeNode):
             raise AttributeError(error_message.format('parent_node',
                                                       type(parent_node)))
-
+        if parent_node:
+            parent = self.get_signature(self.code_lines,
+                                        parent_node.code_fragment.first_line)
+        else:
+            parent = ''
         code_data = CodeData(node.code_fragment,
                              self.module_name,
                              self.get_signature(
@@ -50,7 +54,7 @@ class DocsByTree:
                              self._get_docstring(
                                  self.code_lines,
                                  node.code_fragment.first_line),
-                             self.get_signature(self.code_lines, parent_node.code_fragment.first_line))
+                             parent)
 
         if code_data.name.startswith('__') and code_data.name != '__init__':
             return
@@ -156,18 +160,18 @@ class DocsByTree:
         return self._documentation_nodes
 
     @staticmethod
-    def get_module_description(source_code):
+    def get_module_description(module_source_code):
         pattern1 = r'[\ ]*"""([\S\s]*?)"""'
         pattern2 = r'[\ ]*"([\S\s]*?)"'
         pattern3 = r"[\ ]*'([\S\s]*?)'"
-        result = re.search(pattern1, source_code)
 
+        result = re.match(pattern1, module_source_code)
         if result:
             return result.group(1)
-        result = re.search(pattern2, source_code)
+        result = re.match(pattern2, module_source_code)
         if result:
             return result.group(1)
-        result = re.search(pattern3, source_code)
+        result = re.match(pattern3, module_source_code)
         if result:
             return result.group(1)
         return ''
@@ -206,7 +210,7 @@ class CodeData:
             raise AttributeError(error_msg.format('"parent_signature"',
                                                   'str',
                                                   type(parent_signature)))
-        self._parent_name = self._get_name(parent_signature)
+        self._parent_name = self._get_name(parent_signature) if fragment.type != 'file' else ''
 
     @staticmethod
     def _get_name(signature):
@@ -216,6 +220,7 @@ class CodeData:
         if signature.startswith('def') or signature.startswith('class'):
             new_sign = signature.replace('(', ' ').replace(':', ' ')
             return new_sign.split()[1]
+        return ''
 
     @property
     def module_name(self):
