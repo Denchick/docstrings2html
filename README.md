@@ -44,7 +44,7 @@ architecture/html_builder.py     159     47    70%   12, 30, 114-115, 167-230
 TOTAL                            397     72    86%
 ```
 
-![screen1](images/pep8.png)
+![screen1](screenshots/pep8.png)
 
 ## Как это работает
 
@@ -71,10 +71,10 @@ TOTAL                            397     72    86%
 
 ## Скриншоты
 
-![screen1](images/classes.png)
+![screen1](screenshots/classes.png)
 
-![screen2](images/methods.png)
+![screen2](screenshots/methods.png)
 
-![screen3](images/code.png)
+![screen3](screenshots/code.png)
 
 
