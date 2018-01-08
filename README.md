@@ -29,7 +29,23 @@
 - Утилита для работы: `docstrings2html.py`
 - Тесты: `tests/`
 
-Для запуска тестов можно использовать `runtest.sh` (нужен `bash`, `coverage3`).
+На многие модули(`architecture/*` кроме `html_builder.py`) написаны тесты, их можно найти в `/tests`. Покрытие по строкам составляет 89%
+
+Для запуска тестов можно использовать `runtest.sh` (нужен `bash`, `coverage3`). 
+
+```
+Name                           Stmts   Miss  Cover   Missing
+------------------------------------------------------------
+architecture/__init__.py           0      0   100%
+architecture/code_tree.py         54     11    80%   15-17, 32, 36-38, 43, 57-63, 66
+architecture/docs_by_tree.py     128     40    69%   12-31, 39-65, 95, 100, 157, 161, 171, 174, 247, 254, 258-261
+architecture/fragments.py         55      5    91%   17, 73-76
+tests/test_code_tree.py           53      0   100%
+tests/test_docs_by_tree.py       125      0   100%
+tests/test_fragments.py           75      0   100%
+------------------------------------------------------------
+TOTAL                            490     56    89%
+```
 
 ## Как это работает
 
