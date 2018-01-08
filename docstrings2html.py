@@ -28,7 +28,7 @@ except Exception as e:
     print('Модули не найдены: "{}"'.format(e), file=sys.stderr)
     sys.exit(ERROR_MODULES_MISSING)
 
-__version__ = '1.0'
+__version__ = '1.1'
 __author__ = 'Volkov Denis'
 __email__ = 'denchick1997@mail.ru'
 
@@ -49,6 +49,11 @@ def create_parser():
     parser.add_argument(
         '-d', '--debug', action='store_true', default=False,
         help="""Режим debug.""")
+    parser.add_argument(
+        '-e', '--exclude-special', action='store_true', default=True,
+        help="""Не включать в документацию методы, начинающиеся с  
+        "__"(кроме __init__). По умолчанию True."""
+    )
     parser.add_argument(
         '--version', action='store_true', default=False,
         help="Печатает версию утилиты и выходит.")
@@ -71,7 +76,7 @@ def main():
     logger.setLevel(logging.DEBUG if args.debug else logging.ERROR)
     logger.addHandler(log)
 
-    Linker(args.output, args.files)
+    Linker(args.output, args.exclude_special, args.files)
 
 if __name__ == "__main__":
     main()
