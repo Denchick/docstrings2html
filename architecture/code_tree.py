@@ -26,7 +26,7 @@ class TreeNode:
             return
         current_fragment = self.nested_nodes[index].code_fragment
         if current_fragment.first_line <= code_fragment.first_line and \
-            code_fragment.last_line <= current_fragment.last_line:
+           code_fragment.last_line <= current_fragment.last_line:
             self.nested_nodes[index].add_fragment(code_fragment)
             return
         self.nested_nodes.insert(index, TreeNode(code_fragment))
@@ -38,8 +38,8 @@ class TreeNode:
             AttributeError(message)
 
         if not self.nested_nodes or \
-                        fragment.last_line <= \
-                        self.nested_nodes[0].code_fragment.first_line:
+           fragment.last_line <= \
+           self.nested_nodes[0].code_fragment.first_line:
             return 0
         if self.nested_nodes[-1].code_fragment.last_line <= \
                 fragment.first_line:
@@ -51,13 +51,13 @@ class TreeNode:
 
             # засунуть вовнутрь
             if current_fragment.first_line <= fragment.first_line and \
-                            fragment.last_line <= current_fragment.last_line:
+               fragment.last_line <= current_fragment.last_line:
                 return i
 
             next_fragment = self.nested_nodes[i + 1].code_fragment
             # засунуть сразу после
             if current_fragment.last_line <= fragment.first_line and \
-                            fragment.last_line <= next_fragment.first_line:
+               fragment.last_line <= next_fragment.first_line:
                 return i + 1
 
         raise RuntimeError("Didnt find where to insert")

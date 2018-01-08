@@ -5,6 +5,8 @@ import logging
 import sys
 import tempfile
 
+""" Вот это прикол """
+
 from . import extremum, piece, utils
 
 LOGGER_NAME = 'map_reduce.map_reduce'
@@ -59,6 +61,10 @@ class MapReduce:
 
         LOGGER.info("OK. Let's start to sorting.")
         self.run_sorting()
+
+    def __str__(self):
+        return 'kek'
+
 
     def initialization_modes_variables(self, **kwargs):
         if self.mode == 'numbers':

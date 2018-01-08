@@ -41,10 +41,11 @@ def create_parser():
     parser = argparse.ArgumentParser(
         description="""Создает HTML-документацию для модуля или файла.""")
     parser.add_argument(
-        '-f', '--files', nargs='+', type=str, help="Пути до файлов или пакетов")
+        '-f', '--files', nargs='+', type=str,
+        help="Пути до файлов или пакетов")
     parser.add_argument(
         '-o', '--output', type=str, default='documentation',
-        help="""Путь до директории, куда сохранить результат. 
+        help="""Путь до директории, куда сохранить результат.
         По умолчанию папка "documentation" в текущем каталоге""")
     parser.add_argument(
         '-d', '--debug', action='store_true', default=False,
@@ -52,8 +53,7 @@ def create_parser():
     parser.add_argument(
         '-e', '--exclude-special', action='store_true', default=False,
         help="""Не включать в документацию методы, начинающиеся с  
-        "__"(кроме __init__). По умолчанию False."""
-    )
+        "__"(кроме __init__). По умолчанию False."""    )
     parser.add_argument(
         '--version', action='store_true', default=False,
         help="Печатает версию утилиты и выходит.")
@@ -77,6 +77,7 @@ def main():
     logger.addHandler(log)
 
     Linker(args.output, args.exclude_special, args.files)
+
 
 if __name__ == "__main__":
     main()

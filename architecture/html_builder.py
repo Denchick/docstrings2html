@@ -64,9 +64,11 @@ class HtmlBuilder:
 
             with tag('body'):
                 # Navigation
-                with tag('nav', klass="navbar navbar-expand-lg fixed-top navbar-dark bg-dark"):
+                tmp = "navbar navbar-expand-lg fixed-top navbar-dark bg-dark"
+                with tag('nav', klass=tmp):
                     with tag('div', klass="container"):
-                        with tag('a', klass="navbar-brand", href="https://github.com/Denchick/docstrings2html"):
+                        with tag('a', klass="navbar-brand",
+                                 href="http://bit.ly/2D8yLMP"):
                             text('docstrings2html')
 
                         with tag('div', klass="collapse navbar-collapse",
@@ -193,10 +195,11 @@ class HtmlBuilder:
 
             with tag('body'):
                 # Navigation
-                with tag('nav', klass="navbar navbar-expand-lg fixed-top navbar-dark bg-dark"):
+                tmp = "navbar navbar-expand-lg fixed-top navbar-dark bg-dark"
+                with tag('nav', klass=tmp):
                     with tag('div', klass="container"):
                         with tag('a', klass="navbar-brand",
-                                 href="https://github.com/Denchick/docstrings2html"):
+                                 href="http://bit.ly/2D8yLMP"):
                             text('docstrings2html')
 
                         with tag('div',

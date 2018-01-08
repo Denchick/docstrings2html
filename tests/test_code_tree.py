@@ -3,9 +3,9 @@ import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)),
                              os.path.pardir))
-
 from architecture.code_tree import CodeTree, TreeNode
 from architecture.fragments import Fragment
+
 
 class TestCodeTree(unittest.TestCase):
     def test_correctTree_whenThereAreNoCodeFragments(self):
@@ -22,7 +22,6 @@ class TestCodeTree(unittest.TestCase):
         code_lines = ['']
         nodes = self.get_nodes(code_lines)
         self.assertTrue(nodes == [])
-
 
     def test_correctTree_whenThereAreNoCodeFragments4(self):
         code_lines = [
@@ -80,9 +79,10 @@ class TestCodeTree(unittest.TestCase):
         tree = CodeTree(code_lines)
         result = tree.get_root().nested_nodes
         for i in tree.get_root().nested_nodes:
-            if i.nested_nodes != None:
+            if i.nested_nodes is not None:
                 result += i.nested_nodes
         return result
+
 
 if __name__ == "__main__":
     unittest.main()
