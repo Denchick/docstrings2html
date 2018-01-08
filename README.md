@@ -44,6 +44,8 @@ architecture/html_builder.py     159     47    70%   12, 30, 114-115, 167-230
 TOTAL                            397     72    86%
 ```
 
+![screen1](images/pep8.png)
+
 ## Как это работает
 
 На вход утилите подается исходный файл или несколько файлов, или пакет.
@@ -65,5 +67,15 @@ TOTAL                            397     72    86%
 
 ```
 ./docstrings2html.py -f test_file1.py test_file2.py
+
+## Скриншоты
+
+![screen1](images/classes.png)
+
+![screen1](images/methods.png)
+
+![screen1](images/code.png)
+
+
 ```
 

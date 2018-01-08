@@ -8,131 +8,133 @@ from architecture.docs_by_tree import DocsByTree
 from architecture.docs_by_tree import CodeData
 from architecture.fragments import Fragment
 
+
 class TestDocByTree(unittest.TestCase):
 
-    def test_getSignature_shouldReturnCorrectSignature_whenSignatureInOneLine_withoutParameters(self):
+    def test_getSignature_whenSignatureInOneLine_withoutParameters(self):
         code_lines = ['class kek:']
         index = 0
-        expected = "class kek"
-        self.assertEqual(DocsByTree.get_signature(code_lines, index), expected)
+        exp = "class kek"
+        self.assertEqual(DocsByTree.get_signature(code_lines, index), exp)
 
-    def test_getSignature_shouldReturnCorrectSignature_whenSignatureInOneLine_withOneParameter(self):
+    def test_getSignature_whenSignatureInOneLine_withOneParameter(self):
         code_lines = ['class Kek(param):']
         index = 0
-        expected = "class Kek(param)"
-        self.assertEqual(DocsByTree.get_signature(code_lines, index), expected)
+        exp = "class Kek(param)"
+        self.assertEqual(DocsByTree.get_signature(code_lines, index), exp)
 
-    def test_getSignature_shouldReturnCorrectSignature_whenSignatureInOneLine_withDefaultParameter(self):
+    def test_getSignature_whenSignatureInOneLine_withDefaultParameter(self):
         code_lines = ['def func(param=10):']
         index = 0
-        expected = "def func(param=10)"
-        self.assertEqual(DocsByTree.get_signature(code_lines, index), expected)
+        exp = "def func(param=10)"
+        self.assertEqual(DocsByTree.get_signature(code_lines, index), exp)
 
-    def test_getSignature_shouldReturnCorrectSignature_whenSignatureInOneLine_withFewParameter(self):
+    def test_getSignature_whenSignatureInOneLine_withFewParameter(self):
         code_lines = ['class Kek(param1, param2, pararam100):']
         index = 0
-        expected = "class Kek(param1, param2, pararam100)"
-        self.assertEqual(DocsByTree.get_signature(code_lines, index), expected)
+        exp = "class Kek(param1, param2, pararam100)"
+        self.assertEqual(DocsByTree.get_signature(code_lines, index), exp)
 
-    def test_getSignature_shouldReturnCorrectSignature_whenSignatureInTwoLines(self):
+    def test_getSignature_whenSignatureInTwoLines(self):
         code_lines = ['class Kek(param1, ', 'param2, pararam100):']
         index = 0
-        expected = "class Kek(param1, param2, pararam100)"
-        self.assertEqual(DocsByTree.get_signature(code_lines, index), expected)
+        exp = "class Kek(param1, param2, pararam100)"
+        self.assertEqual(DocsByTree.get_signature(code_lines, index), exp)
 
-    def test_getSignature_shouldReturnCorrectSignature_whenSignatureInTwoLines_withNesting(self):
-        code_lines = ['     class Kek(param1, ', '           param2, pararam100):']
+    def test_getSignature_whenSignatureInTwoLines_withNesting(self):
+        code_lines = ['     class Kek(param1, ',
+                      '           param2, pararam100):']
         index = 0
-        expected = "class Kek(param1, param2, pararam100)"
-        self.assertEqual(DocsByTree.get_signature(code_lines, index), expected)
+        exp = "class Kek(param1, param2, pararam100)"
+        self.assertEqual(DocsByTree.get_signature(code_lines, index), exp)
 
-    def test_getSignature_shouldReturnCorrectSignature_whenSignatureInFewLines(self):
-        code_lines = ['     class Kek(', 'param1,', '           param2,', 'pararam100):']
+    def test_getSignature_whenSignatureInFewLines(self):
+        code_lines = ['     class Kek(', 'param1,',
+                      '           param2,', 'pararam100):']
         index = 0
-        expected = "class Kek(param1, param2, pararam100)"
-        self.assertEqual(DocsByTree.get_signature(code_lines, index), expected)
+        exp = "class Kek(param1, param2, pararam100)"
+        self.assertEqual(DocsByTree.get_signature(code_lines, index), exp)
 
     def test_getDocstring_shouldReturnCorrectDocstring_withDoubleQuotes(self):
         code_lines = ['" docstring "']
         index = 0
-        expected = " docstring "
-        self.assertEqual(DocsByTree._get_docstring(code_lines, index), expected)
+        exp = " docstring "
+        self.assertEqual(DocsByTree._get_docstring(code_lines, index), exp)
 
     def test_getDocstring_shouldReturnCorrectDocstring_withSingleQuotes(self):
         code_lines = ["'docstring'"]
         index = 0
-        expected = "docstring"
-        self.assertEqual(DocsByTree._get_docstring(code_lines, index), expected)
+        exp = "docstring"
+        self.assertEqual(DocsByTree._get_docstring(code_lines, index), exp)
 
     def test_getDocstring_shouldReturnCorrectDocstring_withTripleQuotes(self):
         code_lines = ['""" docstring """']
         index = 0
-        expected = " docstring "
-        self.assertEqual(DocsByTree._get_docstring(code_lines, index), expected)
+        exp = " docstring "
+        self.assertEqual(DocsByTree._get_docstring(code_lines, index), exp)
 
     def test_getDocstring_shouldReturnCorrectDocstring_withFewLines(self):
         code_lines = ['"""docline1', 'docline2', 'docline3"""']
         index = 0
-        expected = "docline1\ndocline2\ndocline3"
-        self.assertEqual(DocsByTree._get_docstring(code_lines, index), expected)
+        exp = "docline1\ndocline2\ndocline3"
+        self.assertEqual(DocsByTree._get_docstring(code_lines, index), exp)
 
     def test_getDocstring_shouldReturnCorrectDocstring_withRealCode(self):
         code_lines = ['    """docline1', '    docline2', '    docline3"""']
         index = 0
-        expected = "docline1\ndocline2\ndocline3"
-        self.assertEqual(DocsByTree._get_docstring(code_lines, index), expected)
+        exp = "docline1\ndocline2\ndocline3"
+        self.assertEqual(DocsByTree._get_docstring(code_lines, index), exp)
 
-    def test_module_description_when_no_description(self):
+    def test_moduleDescription_whenNoDescription(self):
         source_code = "#!/usr/bin/env python3"
-        expected = ''
-        self.assertEqual(DocsByTree.get_module_description(source_code), expected)
+        exp = ''
+        self.assertEqual(DocsByTree.get_module_description(source_code), exp)
 
-    def test_module_description_when_no_description2(self):
+    def test_moduleDescription_whenNoDescription2(self):
         source_code = ''
-        expected = ''
-        self.assertEqual(DocsByTree.get_module_description(source_code), expected)
+        exp = ''
+        self.assertEqual(DocsByTree.get_module_description(source_code), exp)
 
-    def test_module_description_when_no_description3(self):
+    def test_moduleDescription_whenNoDescription3(self):
         source_code = 'sm text'
-        expected = ''
-        self.assertEqual(DocsByTree.get_module_description(source_code), expected)
+        exp = ''
+        self.assertEqual(DocsByTree.get_module_description(source_code), exp)
 
-    def test_module_description_when_there_is_description_in_the_top(self):
+    def test_moduleDescription_whenThereIsDescriptionInTheTop(self):
         source_code = """'Description'
         some code"""
-        expected = 'Description'
-        self.assertEqual(DocsByTree.get_module_description(source_code), expected)
+        exp = 'Description'
+        self.assertEqual(DocsByTree.get_module_description(source_code), exp)
 
-    def test_module_description_when_there_is_description_not_in_the_top_but_first(self):
+    def test_moduleDescription_whenThereIsDescriptionNotInTopButFirst(self):
         source_code = """
-        
+
         \"\"\"Description\"\"\"
         some code"""
-        expected = ''
-        self.assertEqual(DocsByTree.get_module_description(source_code), expected)
+        exp = ''
+        self.assertEqual(DocsByTree.get_module_description(source_code), exp)
 
-    def test_moduleDescription_whenThereIsDescriptionNotInTheTop_butNotFirst(self):
+    def test_moduleDescription_whenThereIsDescrptionNotInTopAndNotFirst(self):
         source_code = """#!/usr/bin/env python3
 
         \"\"\"Description\"\"\"
         some code"""
-        expected = ''
-        self.assertEqual(DocsByTree.get_module_description(source_code), expected)
+        exp = ''
+        self.assertEqual(DocsByTree.get_module_description(source_code), exp)
 
-    def test_moduleDescription_when_there_is_description_not_in_the_top_but_not_first(self):
+    def test_moduleDescription_whenThereIsDescriptionButNotFirst(self):
         source_code = """#!/usr/bin/env python3
         class kek:
             \"\"\"Description\"\"\"
             some code"""
-        expected = ''
-        self.assertEqual(DocsByTree.get_module_description(source_code), expected)
+        exp = ''
+        self.assertEqual(DocsByTree.get_module_description(source_code), exp)
 
-
-    def test_CodeDataConstructor_shouldRaiseError_whenFragmentIsNotFragment(self):
+    def test_CodeDataConstructor_shouldRaiseError_whenNotFragment(self):
         with self.assertRaises(AttributeError):
             CodeData('kek', 'kek', 'kek', 'kek', 'kek')
 
-    def test_CodeDataConstructor_shouldRaiseError_whenModuleNameIsNotStr(self):
+    def test_CodeDataConstructor_shouldRaiseError_whenModleNameIsNotStr(self):
         with self.assertRaises(AttributeError):
             CodeData(Fragment(0, 0, '', 0), 0, 0, 0, 0)
 
@@ -144,9 +146,10 @@ class TestDocByTree(unittest.TestCase):
         with self.assertRaises(AttributeError):
             CodeData(Fragment(0, 0, '', 0), 'module_name', 'signature', 0, 0)
 
-    def test_CodeDataConstructor_shouldRaiseError_whenParentSignatureIsNotStr(self):
+    def test_constructor_shouldRaiseError_whenParentSignatureIsNotStr(self):
         with self.assertRaises(AttributeError):
-            CodeData(Fragment(0, 0, '', 0), 'module_name', 'signature', 'doc', 0)
+            CodeData(Fragment(0, 0, '', 0), 'module_name',
+                     'signature', 'doc', 0)
 
     def test_CodeData_getName_ShouldReturnCorrectName(self):
         self.assertEqual(CodeData._get_name('class signature:'), 'signature')
@@ -155,13 +158,15 @@ class TestDocByTree(unittest.TestCase):
         self.assertEqual(CodeData._get_name('kek signature:'), '')
 
     def test_CodeDataProperties(self):
-        cd = CodeData(Fragment(0, 0, '', 0), 'module_name', 'class signature', 'docstring', 'class parent_name:')
+        cd = CodeData(Fragment(0, 0, '', 0), 'module_name', 'class signature',
+                      'docstring', 'class parent_name:')
         self.assertEqual(cd.parent_name, 'parent_name')
         self.assertEqual(cd.docstring, 'docstring')
         self.assertEqual(cd.signature, 'class signature')
         self.assertEqual(cd.module_name, 'module_name')
         self.assertEqual(cd.name, 'parent_name.signature')
         self.assertEqual(cd.docstring, 'docstring')
+
 
 if __name__ == "__main__":
     unittest.main()
