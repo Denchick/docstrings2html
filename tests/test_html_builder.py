@@ -36,9 +36,8 @@ class TestHtmlBuilder(unittest.TestCase):
         docs = DocsByTree(tree, code_lines, source_code, '')
         self.html_builder = HtmlBuilder(docs, '', '')
         html_code = self.html_builder.get_html()
-        c = html_code.count('THIS IS NOT DOCSTRING')
 
-        self.assertTrue(c == 1)
+        self.assertTrue(html_code.count('THIS IS NOT DOCSTRING') == 1)
 
 if __name__ == '__main__':
     unittest.main()
