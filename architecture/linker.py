@@ -7,11 +7,12 @@ import os
 
 
 class Linker:
-    def __init__(self, path, args):
+    def __init__(self, path, exclude_special, files):
         """  """
         self.template_directory = 'template'
-        if self.check_input_is_a_packet(args):
-            self.copy_source_directory(args[0], path)
+        self.exclude_special = exclude_special
+        if self.check_input_is_a_packet(files):
+            self.copy_source_directory(files[0], path)
             self.copy_template_directory(path, self.template_directory)
 
             for filename in utils.walk_through_files(path):
@@ -26,14 +27,14 @@ class Linker:
                 os.remove(filename)
             self.create_index_pages(path)
 
-        elif self.ckeck_input_is_a_stdin(args):
+        elif self.ckeck_input_is_a_stdin(files):
             source_code = utils.get_text_from_file(None)
             html_code = self.get_module_html_code(source_code, '', '', '')
             utils.write_to_file(None, html_code)
 
         else:
             self.copy_template_directory(path, self.template_directory)
-            for filename in args:
+            for filename in files:
                 source_code = utils.get_text_from_file(filename)
                 html = self.get_module_html_code(source_code,
                                                  filename,

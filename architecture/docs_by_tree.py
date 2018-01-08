@@ -8,7 +8,7 @@ from architecture.fragments import Fragment
 
 class DocsByTree:
     """ Формирует список CodeData по построенному дереву кода """
-    def __init__(self, tree, code_lines, code, module_name):
+    def __init__(self, tree, code_lines, code, module_name, exclude_special=True):
         error_message = '{0} must be a {1} type, but got type {2}'
         if not isinstance(tree, code_tree.CodeTree):
             raise AttributeError(error_message.format('tree',
@@ -19,6 +19,7 @@ class DocsByTree:
                                                       'list',
                                                       type(code_lines)))
         self.tree = tree
+        self.exclude_special = exclude_special
         self._documentation_nodes = []
         self.code = code
         self.module_description = self.get_module_description(self.code)
@@ -57,7 +58,8 @@ class DocsByTree:
                                  node.code_fragment.first_line),
                              parent)
 
-        if code_data.name.startswith('__') and code_data.name != '__init__':
+        if self.exclude_special and code_data.name.startswith('__') \
+                and code_data.name != '__init__':
             return
 
         self._documentation_nodes.append(code_data)
