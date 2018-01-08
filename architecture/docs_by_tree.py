@@ -58,7 +58,7 @@ class DocsByTree:
                                  node.code_fragment.first_line),
                              parent)
 
-        if self.exclude_special and code_data.name.startswith('__') \
+        if self.exclude_special and '__' in code_data.name \
                 and code_data.name != '__init__':
             return
 

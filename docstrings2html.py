@@ -50,9 +50,9 @@ def create_parser():
         '-d', '--debug', action='store_true', default=False,
         help="""Режим debug.""")
     parser.add_argument(
-        '-e', '--exclude-special', action='store_true', default=True,
+        '-e', '--exclude-special', action='store_true', default=False,
         help="""Не включать в документацию методы, начинающиеся с  
-        "__"(кроме __init__). По умолчанию True."""
+        "__"(кроме __init__). По умолчанию False."""
     )
     parser.add_argument(
         '--version', action='store_true', default=False,

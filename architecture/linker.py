@@ -39,7 +39,8 @@ class Linker:
                 html = self.get_module_html_code(source_code,
                                                  filename,
                                                  '',
-                                                 self.template_directory)
+                                                 self.template_directory,
+                                                 self.exclude_special)
                 joined = os.path.join(path, '{0}.html'.format(filename[:-3]))
                 utils.write_to_file(joined, html)
             self.create_index_pages(path)
@@ -60,10 +61,11 @@ class Linker:
                              source_code,
                              filename,
                              path_to_root,
-                             path_to_template):
+                             path_to_template,
+                             exclude_special):
         code_lines = source_code.split('\n')
         tree = CodeTree(code_lines)
-        docs = DocsByTree(tree, code_lines, source_code, filename)
+        docs = DocsByTree(tree, code_lines, source_code, filename, exclude_special)
         self.html_builder = HtmlBuilder(docs, path_to_root, path_to_template)
         return self.html_builder.get_html()
 
