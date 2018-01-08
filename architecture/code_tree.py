@@ -26,7 +26,7 @@ class TreeNode:
             return
         current_fragment = self.nested_nodes[index].code_fragment
         if current_fragment.first_line <= code_fragment.first_line and \
-                        code_fragment.last_line <= current_fragment.last_line:
+            code_fragment.last_line <= current_fragment.last_line:
             self.nested_nodes[index].add_fragment(code_fragment)
             return
         self.nested_nodes.insert(index, TreeNode(code_fragment))
