@@ -67,15 +67,14 @@ TOTAL                            397     72    86%
 
 ```
 ./docstrings2html.py -f test_file1.py test_file2.py
+```
 
 ## Скриншоты
 
 ![screen1](images/classes.png)
 
-![screen1](images/methods.png)
+![screen2](images/methods.png)
 
-![screen1](images/code.png)
+![screen3](images/code.png)
 
-
-```
 
