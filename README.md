@@ -13,7 +13,7 @@
 - Works equally well on both Windows and Linux;
 - By key --exclude-special you can filter methods with two underscores at the beginning. For example, `__str__()` or `__special()`. In this case, `__init__()` will be added exactly to the documentation;
 
-## Требования
+## Dependencies
 - Python 3;
 - [Yattag](http://www.yattag.org/) - library for generating HTML or XML in a pythonic way;
 
