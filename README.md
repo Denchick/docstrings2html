@@ -17,7 +17,7 @@
 - Python 3;
 - [Yattag](http://www.yattag.org/) - library for generating HTML or XML in a pythonic way;
 
-## Состав
+## Package structure
 
 - Working logic: `architecture/`
 - CSS and JS: `template/`
